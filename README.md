@@ -1,125 +1,125 @@
 # 🎅 Secret Santa Application
 
-Un'applicazione web React per gestire un Secret Santa tra amici, con gestione amministrativa e accesso partecipanti tramite codici univoci.
+A React web application to manage Secret Santa events among friends, with administrative management and participant access via unique codes.
 
-## 📋 Panoramica
+## 📋 Overview
 
-Questa applicazione permette di:
-- **Organizzare** eventi Secret Santa multipli
-- **Gestire** partecipanti e regole dell'evento
-- **Estrarre** automaticamente gli abbinamenti con algoritmo casuale
-- **Permettere ai partecipanti** di visualizzare il loro abbinamento in modo sicuro
-- **Rivelare automaticamente** tutti gli abbinamenti dopo la data di apertura regali
+This application allows you to:
+- **Organize** multiple Secret Santa events
+- **Manage** participants and event rules
+- **Draw** matches automatically with a random algorithm
+- **Allow participants** to view their match securely
+- **Automatically reveal** all matches after the gift opening date
 
-## 🚀 Tecnologie Utilizzate
+## 🚀 Technologies
 
 - **Frontend**: React + Vite
 - **Styling**: CSS Modules
 - **State Management**: useState + Context API + useReducer
 - **Routing**: React Router
 - **Backend**: Supabase (PostgreSQL)
-- **Autenticazione**: 
+- **Authentication**: 
   - Admin: Supabase Auth (username/password)
-  - Partecipanti: Doppio codice (Codice Evento + Codice Partecipante)
-- **Email**: Resend (notifiche ripristino)
+  - Participants: Double code (Event Code + Participant Code)
+- **Email**: Resend (reset notifications)
 - **Deploy**: Vercel
 
-## ✨ Funzionalità Principali
+## ✨ Main Features
 
-### Per l'Amministratore
-- ✅ Pannello admin protetto con autenticazione
-- ✅ Gestione eventi multipli
-- ✅ Configurazione regole, budget e countdown
-- ✅ CRUD partecipanti (aggiungi, modifica, elimina)
-- ✅ Estrazione automatica con animazione natalizia
-- ✅ Visualizzazione abbinamenti (opzionale, con toggle)
-- ✅ Ripristino visualizzazioni per partecipanti
-- ✅ Ricezione email per richieste ripristino
+### For Administrators
+- ✅ Protected admin panel with authentication
+- ✅ Multiple events management
+- ✅ Rules, budget and countdown configuration
+- ✅ CRUD participants (add, edit, delete)
+- ✅ Automatic extraction with Christmas animation
+- ✅ View matches (optional, with toggle)
+- ✅ Reset views for participants
+- ✅ Receive email for reset requests
 
-### Per i Partecipanti
-- ✅ Accesso tramite doppio codice (Evento + Partecipante)
-- ✅ Visualizzazione abbinamento **UNA SOLA VOLTA** (prima dell'apertura)
-- ✅ Richiesta ripristino via email all'admin
-- ✅ Visualizzazione completa di tutti gli abbinamenti dopo la data di apertura
-- ✅ Pannello regole globale sempre accessibile
+### For Participants
+- ✅ Access via double code (Event + Participant)
+- ✅ View match **ONLY ONCE** (before opening)
+- ✅ Request reset via email to admin
+- ✅ View complete list of all matches after opening date
+- ✅ Global rules panel always accessible
 
 ### Design & UX
-- 🎄 Tema natalizio (rosso, verde, bianco, oro)
-- ❄️ Animazioni natalizie (fiocchi di neve, effetti reveal)
-- 📱 Design responsive mobile-first
-- ⏱️ Countdown dinamico per apertura regali
+- 🎄 Christmas theme (red, green, white, gold)
+- ❄️ Christmas animations (snowflakes, reveal effects)
+- 📱 Mobile-first responsive design
+- ⏱️ Dynamic countdown for gift opening
 
-## 📂 Struttura Progetto
+## 📂 Project Structure
 
 ```
 src/
-  ├── components/          # Componenti React
-  │   ├── Admin/          # Componenti pannello admin
-  │   ├── Participant/    # Componenti vista partecipante
-  │   └── Shared/         # Componenti condivisi
-  ├── pages/              # Pagine principali
+  ├── components/          # React components
+  │   ├── Admin/          # Admin panel components
+  │   ├── Participant/    # Participant view components
+  │   └── Shared/         # Shared components
+  ├── pages/              # Main pages
   ├── hooks/              # Custom React hooks
-  ├── utils/              # Utilities (algoritmi, encryption, ecc.)
+  ├── utils/              # Utilities (algorithms, encryption, etc.)
   ├── context/            # Context API providers
-  └── styles/             # CSS globali e modules
+  └── styles/             # Global CSS and modules
 ```
 
 ## 🗄️ Database (Supabase)
 
-### Tabelle Principali
-- **events**: Eventi Secret Santa con configurazione
-- **participants**: Partecipanti per ogni evento
-- **assignments**: Abbinamenti cifrati
-- **reset_requests**: Richieste di ripristino visualizzazione
+### Main Tables
+- **events**: Secret Santa events with configuration
+- **participants**: Participants for each event
+- **assignments**: Encrypted matches
+- **reset_requests**: View reset requests
 
-## 🔐 Sicurezza
+## 🔐 Security
 
-- Row Level Security (RLS) su Supabase
-- Abbinamenti mascherati con hash/cifratura nel database
-- Codici partecipante editabili e univoci per evento
-- Conferme per operazioni distruttive (eliminazioni)
+- Row Level Security (RLS) on Supabase
+- Matches masked with hash/encryption in database
+- Editable and unique participant codes per event
+- Confirmations for destructive operations (deletions)
 
 ## 📅 MVP (Minimum Viable Product)
 
-Il progetto è attualmente in fase di sviluppo. Le funzionalità dell'MVP includono:
-- Gestione completa eventi e partecipanti
-- Sistema di estrazione con validazioni
-- Accesso sicuro per partecipanti
-- Visualizzazione controllata (una volta)
-- Sistema ripristino via email
-- Design natalizio responsive
+The project is currently in development. MVP features include:
+- Complete event and participant management
+- Extraction system with validations
+- Secure access for participants
+- Controlled viewing (once only)
+- Email reset system
+- Responsive Christmas design
 
-## 🚧 Funzionalità Future
+## 🚧 Future Features
 
-- Invio email automatico con codici
-- Gestione esclusioni/coppie
-- Lista desideri per partecipanti
-- Storico eventi passati
-- Chat anonima tra regalatore e ricevente
-- Multi-lingua (i18n)
-- Temi personalizzabili
+- Automatic email delivery with codes
+- Exclusions/couples management
+- Wish lists for participants
+- Past events history
+- Anonymous chat between giver and receiver
+- Multi-language (i18n)
+- Customizable themes
 
-## 👨‍💻 Sviluppo
+## 👨‍💻 Development
 
-### Prerequisiti
+### Prerequisites
 - Node.js (v18+)
-- Account Supabase
-- Account Resend (per email)
+- Supabase account
+- Resend account (for email)
 
-### Setup Locale
+### Local Setup
 ```bash
-# Installazione dipendenze
+# Install dependencies
 npm install
 
-# Configurazione variabili d'ambiente
+# Configure environment variables
 cp .env.example .env
-# Modifica .env con le tue credenziali Supabase e Resend
+# Edit .env with your Supabase and Resend credentials
 
-# Avvio development server
+# Start development server
 npm run dev
 ```
 
-### Build Produzione
+### Production Build
 ```bash
 npm run build
 npm run preview
@@ -127,21 +127,21 @@ npm run preview
 
 ## 📦 Deploy
 
-L'applicazione è configurata per il deploy su Vercel:
+The application is configured for deployment on Vercel:
 ```bash
-# Deploy automatico collegando il repository GitHub a Vercel
-# oppure
+# Automatic deploy by connecting GitHub repository to Vercel
+# or
 vercel deploy
 ```
 
-## 📄 Licenza
+## 📄 License
 
-Questo progetto è stato creato per uso personale.
+This project was created for personal use.
 
-## 🎁 Contributi
+## 🎁 Contributions
 
-Contributi, issues e feature requests sono benvenuti!
+Contributions, issues and feature requests are welcome!
 
 ---
 
-**Buon Secret Santa! 🎅🎄**
+**Happy Secret Santa! 🎅🎄**
