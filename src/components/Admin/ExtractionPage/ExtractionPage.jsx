@@ -5,6 +5,7 @@ import { createAssignments, validateExtraction } from '../../../utils/extraction
 import { encrypt } from '../../../utils/encryption';
 import ChristmasAnimation from '../../Shared/ChristmasAnimation';
 import ConfirmDialog from '../../Shared/ConfirmDialog';
+import styles from './ExtractionPage.module.css';
 
 const ExtractionPage = () => {
   const { currentEvent, updateEvent } = useEvent();
@@ -16,22 +17,23 @@ const ExtractionPage = () => {
   const [showConfirm, setShowConfirm] = useState(false);
   const [error, setError] = useState('');
 
-  useEffect(() => {
-    fetchData();
-  }, [currentEvent]);
-
   const fetchData = async () => {
     if (!currentEvent) return;
     setLoading(true);
-    
+
     const { data: partData } = await supabase.from('participants').select('*').eq('event_id', currentEvent.id);
     setParticipants(partData || []);
-    
+
     const { data: assignData } = await supabase.from('assignments').select('*').eq('event_id', currentEvent.id);
     setAssignments(assignData || []);
-    
+
     setLoading(false);
   };
+
+  useEffect(() => {
+    fetchData();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [currentEvent]);
 
   const handleExtraction = async () => {
     setError('');
@@ -74,7 +76,8 @@ const ExtractionPage = () => {
         
         await fetchData();
         setShowAnimation(false);
-      } catch (err) {
+      } catch (e) {
+        console.error(e);
         setError('Errore durante l\'estrazione');
         setShowAnimation(false);
       }
@@ -99,87 +102,70 @@ const ExtractionPage = () => {
   }
 
   return (
-    <div style={{ maxWidth: '900px', margin: '0 auto' }}>
-      <h1 style={{ fontSize: '2rem', marginBottom: '2rem', color: '#c41e3a' }}>🎁 Estrazione Secret Santa</h1>
+    <div className={styles.container}>
+      <h1 className={styles.title}>🎁 Estrazione Secret Santa</h1>
 
       {error && (
-        <div style={{ padding: '1rem', background: '#fee', border: '2px solid #fcc', borderRadius: '8px', marginBottom: '2rem', color: '#c00' }}>
-          ⚠️ {error}
-        </div>
+        <div className={styles.errorBox}>⚠️ {error}</div>
       )}
 
-      <div style={{ background: 'white', borderRadius: '12px', padding: '2rem', marginBottom: '2rem' }}>
-        <h2 style={{ marginBottom: '1rem' }}>Stato Estrazione</h2>
-        <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '1rem', marginBottom: '1.5rem' }}>
+      <div className={styles.card}>
+  <h2 className={styles.cardTitle}>Stato Estrazione</h2>
+  <div className={styles.grid}>
           <div>
-            <div style={{ color: '#666', fontSize: '0.9rem' }}>Partecipanti</div>
-            <div style={{ fontSize: '2rem', fontWeight: 'bold', color: '#165b33' }}>{participants.length}</div>
+            <div className={styles.muted}>Partecipanti</div>
+            <div className={styles.count}>{participants.length}</div>
           </div>
           <div>
-            <div style={{ color: '#666', fontSize: '0.9rem' }}>Stato</div>
-            <div style={{ fontSize: '1.5rem', fontWeight: 'bold', color: assignments.length > 0 ? '#165b33' : '#c41e3a' }}>
+            <div className={styles.muted}>Stato</div>
+            <div className={`${styles.status} ${assignments.length > 0 ? styles.statusSuccess : styles.statusError}`}>
               {assignments.length > 0 ? '✅ Estratto' : '⬜ Non estratto'}
             </div>
           </div>
         </div>
 
-        <button
+  <button
           onClick={handleExtraction}
           disabled={loading || participants.length < 3}
-          style={{
-            width: '100%',
-            padding: '1.5rem',
-            background: participants.length < 3 ? '#ccc' : 'linear-gradient(135deg, #c41e3a 0%, #8b1429 100%)',
-            color: 'white',
-            border: 'none',
-            borderRadius: '8px',
-            fontSize: '1.25rem',
-            fontWeight: 'bold',
-            cursor: participants.length < 3 ? 'not-allowed' : 'pointer',
-          }}
+          className={`${styles.primaryBtn} ${participants.length < 3 ? styles.disabled : styles.extract}`}
         >
           {assignments.length > 0 ? '🔄 Ri-estrai Secret Santa' : '🎁 Estrai Secret Santa'}
         </button>
 
         {participants.length < 3 && (
-          <div style={{ marginTop: '1rem', textAlign: 'center', color: '#666' }}>
-            Servono almeno 3 partecipanti per l'estrazione
-          </div>
+          <div className={styles.placeholder}>Servono almeno 3 partecipanti per l'estrazione</div>
         )}
       </div>
 
       {assignments.length > 0 && (
-        <div style={{ background: 'white', borderRadius: '12px', padding: '2rem' }}>
-          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '1rem' }}>
+        <div className={styles.assignmentsCard}>
+          <div className={styles.assignmentsHeader}>
             <h2>Abbinamenti</h2>
             <button
               onClick={() => setShowAssignments(!showAssignments)}
-              style={{ padding: '0.75rem 1.5rem', background: showAssignments ? '#c41e3a' : '#165b33', color: 'white', border: 'none', borderRadius: '8px', cursor: 'pointer' }}
+              className={`${styles.toggleBtn} ${showAssignments ? styles.show : styles.hide}`}
             >
               {showAssignments ? '👁️ Nascondi' : '👁️‍🗨️ Mostra'}
             </button>
           </div>
 
           {showAssignments && (
-            <div style={{ background: '#f5f5f5', borderRadius: '8px', padding: '1.5rem' }}>
+            <div className={styles.assignmentsList}>
               {assignmentDetails.map((a, i) => (
-                <div key={i} style={{ padding: '1rem', background: 'white', borderRadius: '6px', marginBottom: '0.5rem', display: 'flex', alignItems: 'center', gap: '1rem' }}>
-                  <div style={{ flex: 1, fontWeight: 'bold' }}>{a.giver}</div>
-                  <div style={{ fontSize: '1.5rem' }}>→</div>
-                  <div style={{ flex: 1, color: '#c41e3a', fontWeight: 'bold' }}>{a.receiver}</div>
+                <div key={i} className={styles.assignRow}>
+                  <div className={styles.assignGiver}>{a.giver}</div>
+                  <div className={styles.arrow}>→</div>
+                  <div className={styles.assignReceiver}>{a.receiver}</div>
                 </div>
               ))}
             </div>
           )}
 
           {!showAssignments && (
-            <div style={{ textAlign: 'center', padding: '2rem', color: '#666' }}>
-              Clicca "Mostra" per vedere gli abbinamenti
-            </div>
+            <div className={styles.placeholder}>Clicca "Mostra" per vedere gli abbinamenti</div>
           )}
         </div>
       )}
-
       <ConfirmDialog
         isOpen={showConfirm}
         title="Ri-estrai Secret Santa"

@@ -5,6 +5,7 @@ import { decrypt } from '../../utils/encryption';
 import { useEventStatus } from '../../hooks/useEventStatus';
 import { sendResetRequestEmail } from '../../utils/emailService';
 import TopBar from '../../components/Shared/TopBar';
+import styles from './ParticipantView.module.css';
 
 const ParticipantView = () => {
   const { eventCode, participantCode } = useParams();
@@ -18,10 +19,6 @@ const ParticipantView = () => {
   const [resetRequested, setResetRequested] = useState(false);
   const isEventOpen = useEventStatus(event?.data_apertura);
   const [allAssignments, setAllAssignments] = useState([]);
-
-  useEffect(() => {
-    fetchData();
-  }, []);
 
   const fetchData = async () => {
     setLoading(true);
@@ -110,10 +107,16 @@ const ParticipantView = () => {
       return 'Errore decifratura';
     }
   };
+  
+
+  useEffect(() => {
+    fetchData();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   if (loading) {
     return (
-      <div style={{ minHeight: '100vh', background: 'var(--bg-secondary)', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '1.25rem', color: 'var(--text-secondary)', paddingTop: '80px' }}>
+      <div className={`${styles.page} ${styles.center}`}>
         <TopBar 
           eventName={event?.nome_evento || 'Secret Santa'} 
           targetDate={event?.data_apertura} 
@@ -127,18 +130,18 @@ const ParticipantView = () => {
 
   if (error) {
     return (
-      <div style={{ minHeight: '100vh', background: 'var(--bg-secondary)', display: 'flex', alignItems: 'center', justifyContent: 'center', padding: '1.5rem', paddingTop: '100px' }}>
+      <div className={`${styles.page} ${styles.center}`}>
         <TopBar 
           eventName={event?.nome_evento || 'Secret Santa'} 
           targetDate={event?.data_apertura} 
           event={event}
           participant={participant}
         />
-        <div style={{ background: 'var(--bg-primary)', borderRadius: 'var(--border-radius-xl)', padding: '2.5rem', textAlign: 'center', maxWidth: '480px', boxShadow: 'var(--shadow-lg)', border: '1px solid var(--border-color)' }}>
-          <div style={{ fontSize: '4rem', marginBottom: '1rem' }}>⚠️</div>
-          <h1 style={{ color: 'var(--error)', marginBottom: '1rem', fontSize: '1.75rem' }}>Errore</h1>
-          <p style={{ fontSize: '1.1rem', color: 'var(--text-secondary)', marginBottom: '1.5rem' }}>{error}</p>
-          <a href="/" style={{ display: 'inline-block', padding: '0.875rem 1.75rem', background: 'var(--accent-green)', color: 'white', textDecoration: 'none', borderRadius: 'var(--border-radius-md)', fontWeight: 600, boxShadow: 'var(--shadow-sm)' }}>
+        <div className={`${styles.card} ${styles.errorCard}`}>
+          <div className={styles.bigEmoji}>⚠️</div>
+          <h1 className={styles.errorTitle}>Errore</h1>
+          <p className={styles.errorText}>{error}</p>
+          <a href="/" className={styles.primaryBtn}>
             ← Torna alla Home
           </a>
         </div>
@@ -149,28 +152,27 @@ const ParticipantView = () => {
   // DOPO DATA APERTURA
   if (isEventOpen) {
     return (
-      <div style={{ minHeight: '100vh', background: 'var(--bg-secondary)', padding: '1.5rem', paddingTop: '80px' }}>
+      <div className={styles.page}>
         <TopBar 
           eventName={event.nome_evento} 
           targetDate={event.data_apertura} 
           event={event}
           participant={participant}
         />
-        
-        <div style={{ maxWidth: '800px', margin: '0 auto' }}>
-          <div style={{ background: 'var(--bg-primary)', borderRadius: 'var(--border-radius-xl)', padding: '2.5rem', boxShadow: 'var(--shadow-lg)', border: '1px solid var(--border-color)' }}>
-            <div style={{ textAlign: 'center', marginBottom: '2rem' }}>
-              <div style={{ width: '80px', height: '80px', background: 'linear-gradient(135deg, var(--accent-green) 0%, var(--accent-green-dark) 100%)', borderRadius: '50%', display: 'flex', alignItems: 'center', justifyContent: 'center', margin: '0 auto 1.5rem', fontSize: '2.5rem', boxShadow: 'var(--shadow-md)' }}>🎄</div>
-              <h1 style={{ fontSize: '1.75rem', color: 'var(--accent-green)', marginBottom: '0.5rem' }}>Il Secret Santa è concluso!</h1>
-              <p style={{ color: 'var(--text-secondary)' }}>Ecco tutti gli abbinamenti:</p>
+        <div className={styles.assignmentsWrapper}>
+          <div className={styles.card}>
+            <div className={styles.centerHeader}>
+              <div className={styles.iconCircle}>🎄</div>
+              <h1 className={styles.title}>Il Secret Santa è concluso!</h1>
+              <p className={styles.muted}>Ecco tutti gli abbinamenti:</p>
             </div>
 
-            <div style={{ background: 'var(--bg-secondary)', borderRadius: 'var(--border-radius-lg)', padding: '1.5rem' }}>
+            <div className={styles.assignList}>
               {allAssignments.map((a, i) => (
-                <div key={i} style={{ padding: '1rem', background: 'var(--bg-primary)', borderRadius: 'var(--border-radius-md)', marginBottom: '0.75rem', display: 'flex', alignItems: 'center', gap: '1rem', border: '1px solid var(--border-color)' }}>
-                  <div style={{ flex: 1, fontWeight: 600, color: 'var(--text-primary)' }}>{a.giver}</div>
-                  <div style={{ fontSize: '1.5rem', color: 'var(--accent-red)' }}>→</div>
-                  <div style={{ flex: 1, fontWeight: 600, color: 'var(--accent-red)' }}>{a.receiver}</div>
+                <div key={i} className={styles.assignRow}>
+                  <div className={styles.assignGiver}>{a.giver}</div>
+                  <div className={styles.arrow}>→</div>
+                  <div className={styles.assignReceiver}>{a.receiver}</div>
                 </div>
               ))}
             </div>
@@ -183,7 +185,7 @@ const ParticipantView = () => {
   // ESTRAZIONE NON ANCORA EFFETTUATA
   if (!event.extraction_done) {
     return (
-      <div style={{ minHeight: '100vh', background: 'var(--bg-secondary)', display: 'flex', alignItems: 'center', justifyContent: 'center', padding: '1.5rem', paddingTop: '80px' }}>
+      <div className={`${styles.page} ${styles.center}`}>
         <TopBar 
           eventName={event.nome_evento} 
           targetDate={event.data_apertura} 
@@ -191,16 +193,14 @@ const ParticipantView = () => {
           participant={participant}
         />
         
-        <div style={{ background: 'var(--bg-primary)', borderRadius: 'var(--border-radius-xl)', padding: '2.5rem', maxWidth: '580px', boxShadow: 'var(--shadow-lg)', border: '1px solid var(--border-color)', textAlign: 'center' }}>
-          <div style={{ fontSize: '4rem', marginBottom: '1rem' }}>⏳</div>
-          <h1 style={{ color: 'var(--accent-red)', fontSize: '1.75rem', marginBottom: '1rem' }}>Estrazione non ancora effettuata</h1>
-          <p style={{ fontSize: '1.05rem', color: 'var(--text-secondary)', marginBottom: '1.75rem', lineHeight: '1.6' }}>
+        <div className={`${styles.card} ${styles.warningCard}`}>
+          <div className={styles.bigEmoji}>⏳</div>
+          <h1 className={styles.lockedTitle}>Estrazione non ancora effettuata</h1>
+          <p className={styles.lockedText}>
             L'organizzatore non ha ancora effettuato l'estrazione del Secret Santa.<br/>
             Riprova più tardi!
           </p>
-          <a href="/" style={{ display: 'inline-block', padding: '0.875rem 1.75rem', background: 'var(--accent-green)', color: 'white', textDecoration: 'none', borderRadius: 'var(--border-radius-md)', fontWeight: 600, boxShadow: 'var(--shadow-sm)' }}>
-            ← Torna alla Home
-          </a>
+          <a href="/" className={styles.primaryBtn}>← Torna alla Home</a>
         </div>
       </div>
     );
@@ -210,7 +210,7 @@ const ParticipantView = () => {
   if (!participant.has_viewed && !revealed) {
     if (showWarning) {
       return (
-        <div style={{ minHeight: '100vh', background: 'var(--bg-secondary)', display: 'flex', alignItems: 'center', justifyContent: 'center', padding: '1.5rem', paddingTop: '80px' }}>
+        <div className={`${styles.page} ${styles.center}`}>
           <TopBar 
             eventName={event.nome_evento} 
             targetDate={event.data_apertura} 
@@ -218,21 +218,19 @@ const ParticipantView = () => {
             participant={participant}
           />
           
-          <div style={{ background: 'var(--bg-primary)', borderRadius: 'var(--border-radius-xl)', padding: '2.5rem', maxWidth: '580px', boxShadow: 'var(--shadow-lg)', border: '1px solid var(--border-color)' }}>
-            <div style={{ textAlign: 'center', marginBottom: '2rem' }}>
-              <div style={{ fontSize: '4rem', marginBottom: '1rem' }}>⚠️</div>
-              <h1 style={{ color: 'var(--accent-red)', fontSize: '1.75rem', marginBottom: '1rem' }}>Attenzione!</h1>
-              <div style={{ fontSize: '1.1rem', lineHeight: '1.7', marginBottom: '1.75rem', color: 'var(--text-secondary)' }}>
-                Potrai vedere il tuo abbinamento <strong style={{ color: 'var(--text-primary)' }}>UNA SOLA VOLTA</strong>.<br/>
+          <div className={`${styles.card} ${styles.warningCard}`}>
+            <div className={styles.centerHeader}>
+              <div className={styles.bigEmoji}>⚠️</div>
+              <h1 className={styles.lockedTitle}>Attenzione!</h1>
+              <div className={styles.warningText}>
+                Potrai vedere il tuo abbinamento <strong className={styles.strongPrimary}>UNA SOLA VOLTA</strong>.<br/>
                 Assicurati di segnarti il nome!
               </div>
             </div>
 
             <button
               onClick={() => setShowWarning(false)}
-              style={{ width: '100%', padding: '1.25rem', background: 'linear-gradient(135deg, var(--accent-green) 0%, var(--accent-green-dark) 100%)', color: 'white', border: 'none', borderRadius: 'var(--border-radius-md)', fontSize: '1.15rem', fontWeight: 600, cursor: 'pointer', boxShadow: 'var(--shadow-md)', transition: 'all var(--transition-normal)' }}
-              onMouseEnter={(e) => (e.target.style.transform = 'translateY(-2px)', e.target.style.boxShadow = 'var(--shadow-lg)')}
-              onMouseLeave={(e) => (e.target.style.transform = 'translateY(0)', e.target.style.boxShadow = 'var(--shadow-md)')}
+              className={styles.primaryBtn}
             >
               🎁 Rivela il mio Secret Santa
             </button>
@@ -243,7 +241,7 @@ const ParticipantView = () => {
 
     // REVEAL - Mostra il nome
     return (
-      <div style={{ minHeight: '100vh', background: 'var(--bg-secondary)', display: 'flex', alignItems: 'center', justifyContent: 'center', padding: '1.5rem', paddingTop: '80px' }}>
+      <div className={`${styles.page} ${styles.center}`}>
         <TopBar 
           eventName={event.nome_evento} 
           targetDate={event.data_apertura} 
@@ -251,28 +249,24 @@ const ParticipantView = () => {
           participant={participant}
         />
         
-        <div style={{ background: 'var(--bg-primary)', borderRadius: 'var(--border-radius-xl)', padding: '3rem', maxWidth: '680px', boxShadow: 'var(--shadow-lg)', border: '1px solid var(--border-color)', textAlign: 'center' }}>
-          <div style={{ fontSize: '5rem', marginBottom: '1.5rem' }}>🎁</div>
-          
-          <h1 style={{ fontSize: '1.35rem', color: 'var(--text-secondary)', marginBottom: '1.25rem', fontWeight: 400 }}>
-            Ciao <strong style={{ color: 'var(--text-primary)' }}>{participant.nome}</strong>!<br/>
+  <div className={`${styles.card} ${styles.revealCardLarge}`}>
+          <div className={styles.bigEmoji}>🎁</div>
+
+          <h1 className={styles.revealTitle}>
+            Ciao <strong className={styles.strongPrimary}>{participant.nome}</strong>!<br/>
             Devi fare un regalo a:
           </h1>
-          
-          <div style={{ fontSize: '3rem', fontWeight: 700, color: 'var(--accent-red)', marginBottom: '2rem', padding: '2rem', background: 'linear-gradient(135deg, #fff5f5 0%, #ffe8e8 100%)', borderRadius: 'var(--border-radius-lg)', border: '2px solid var(--accent-red-light)' }}>
-            {getReceiverName()}
-          </div>
+
+          <div className={styles.revealBox}>{getReceiverName()}</div>
 
           <button
             onClick={handleReveal}
-            style={{ padding: '1.25rem 2.5rem', background: 'linear-gradient(135deg, var(--accent-green) 0%, var(--accent-green-dark) 100%)', color: 'white', border: 'none', borderRadius: 'var(--border-radius-md)', fontSize: '1.15rem', fontWeight: 600, cursor: 'pointer', boxShadow: 'var(--shadow-md)', transition: 'all var(--transition-normal)' }}
-            onMouseEnter={(e) => (e.target.style.transform = 'translateY(-2px)', e.target.style.boxShadow = 'var(--shadow-lg)')}
-            onMouseLeave={(e) => (e.target.style.transform = 'translateY(0)', e.target.style.boxShadow = 'var(--shadow-md)')}
+            className={styles.primaryBtn}
           >
             ✅ Ho capito!
           </button>
 
-          <p style={{ marginTop: '1.75rem', color: 'var(--text-secondary)', fontSize: '0.9rem' }}>
+          <p className={styles.smallNote}>
             Ricorda: non potrai più vedere questo abbinamento!
           </p>
         </div>
@@ -282,7 +276,7 @@ const ParticipantView = () => {
 
   // PRIMA DATA APERTURA - HA GIÀ VISTO (o ha premuto "Ho capito")
   return (
-    <div style={{ minHeight: '100vh', background: 'var(--bg-secondary)', display: 'flex', alignItems: 'center', justifyContent: 'center', padding: '1.5rem', paddingTop: '80px' }}>
+  <div className={`${styles.page} ${styles.center}`}>
       <TopBar 
         eventName={event.nome_evento} 
         targetDate={event.data_apertura} 
@@ -290,23 +284,21 @@ const ParticipantView = () => {
         participant={participant}
       />
       
-      <div style={{ background: 'var(--bg-primary)', borderRadius: 'var(--border-radius-xl)', padding: '2.5rem', maxWidth: '580px', boxShadow: 'var(--shadow-lg)', border: '1px solid var(--border-color)', textAlign: 'center' }}>
-        <div style={{ fontSize: '4rem', marginBottom: '1rem' }}>🔒</div>
-        <h1 style={{ color: 'var(--accent-red)', fontSize: '1.75rem', marginBottom: '1rem' }}>Hai già visualizzato</h1>
-        <p style={{ fontSize: '1.05rem', color: 'var(--text-secondary)', marginBottom: '1.75rem', lineHeight: '1.6' }}>
+      <div className={`${styles.card} ${styles.lockedCard}`}>
+        <div className={styles.lockedIcon}>🔒</div>
+        <h1 className={styles.lockedTitle}>Hai già visualizzato</h1>
+        <p className={styles.lockedText}>
           Hai già visto il tuo abbinamento. Se hai bisogno di rivederlo, richiedi il ripristino all'organizzatore.
         </p>
 
         {resetRequested ? (
-          <div style={{ padding: '1.25rem', background: 'var(--success-light)', borderRadius: 'var(--border-radius-md)', color: 'var(--success-dark)', border: '1px solid var(--success)' }}>
+          <div className={styles.successBox}>
             ✅ Richiesta inviata! L'organizzatore riceverà una notifica.
           </div>
         ) : (
           <button
             onClick={handleResetRequest}
-            style={{ padding: '1.125rem 1.75rem', background: 'linear-gradient(135deg, var(--accent-green) 0%, var(--accent-green-dark) 100%)', color: 'white', border: 'none', borderRadius: 'var(--border-radius-md)', fontSize: '1.05rem', fontWeight: 600, cursor: 'pointer', boxShadow: 'var(--shadow-md)', transition: 'all var(--transition-normal)' }}
-            onMouseEnter={(e) => (e.target.style.transform = 'translateY(-2px)', e.target.style.boxShadow = 'var(--shadow-lg)')}
-            onMouseLeave={(e) => (e.target.style.transform = 'translateY(0)', e.target.style.boxShadow = 'var(--shadow-md)')}
+            className={styles.secondaryBtn}
           >
             📧 Richiedi Ripristino
           </button>

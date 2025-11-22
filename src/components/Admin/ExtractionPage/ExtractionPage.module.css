@@ -1,0 +1,23 @@
+.container { max-width: 900px; margin: 0 auto; }
+.title { font-size: 2rem; margin-bottom: 2rem; color: var(--accent-red); }
+.errorBox { padding: 1rem; background: #fee; border: 2px solid #fcc; border-radius: 8px; margin-bottom: 2rem; color: #c00; }
+.card { background: white; border-radius: 12px; padding: 2rem; margin-bottom: 2rem; }
+.grid { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; margin-bottom: 1.5rem; }
+.muted { color: #666; font-size: 0.9rem; }
+.count { font-size: 2rem; font-weight: bold; color: #165b33; }
+.status { font-size: 1.5rem; font-weight: bold; }
+.statusSuccess { color: #165b33; }
+.statusError { color: #c41e3a; }
+.cardTitle { margin-bottom: 1rem; }
+.primaryBtn { width: 100%; padding: 1.5rem; color: white; border: none; border-radius: 8px; font-size: 1.25rem; font-weight: bold; cursor: pointer; }
+.primaryBtn.disabled { background: #ccc; cursor: not-allowed; }
+.primaryBtn.extract { background: linear-gradient(135deg, #c41e3a 0%, #8b1429 100%); }
+.assignmentsCard { background: white; border-radius: 12px; padding: 2rem; }
+.assignmentsList { background: #f5f5f5; border-radius: 8px; padding: 1.5rem; }
+.assignRow { padding: 1rem; background: white; border-radius: 6px; margin-bottom: 0.5rem; display: flex; align-items: center; gap: 1rem; }
+.assignGiver { flex: 1; font-weight: bold; }
+.assignReceiver { flex: 1; color: #c41e3a; font-weight: bold; }
+.toggleBtn { padding: 0.75rem 1.5rem; color: white; border: none; border-radius: 8px; cursor: pointer; }
+.toggleBtn.show { background: #c41e3a; }
+.toggleBtn.hide { background: #165b33; }
+.placeholder { text-align: center; padding: 2rem; color: #666; }

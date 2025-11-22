@@ -1,0 +1,15 @@
+.container { max-width: 800px; margin: 0 auto; }
+.title { font-size: 2rem; margin-bottom: 2rem; color: var(--accent-red); }
+.form { display: flex; flex-direction: column; gap: 1.5rem; }
+.fieldLabel { font-weight: 600; display: block; margin-bottom: 0.5rem; }
+.input { width: 100%; padding: 0.75rem; border: 2px solid var(--muted-border, #e0e0e0); border-radius: 8px; font-size: 1rem; }
+.monoInput { font-family: monospace; font-weight: bold; }
+.grid3 { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 1rem; }
+.smallNote { color: var(--muted-text, #666); font-size: 0.85rem; }
+.textarea { width: 100%; padding: 0.75rem; border: 2px solid var(--muted-border, #e0e0e0); border-radius: 8px; font-size: 1rem; font-family: inherit; resize: vertical; }
+.saveBtn { padding: 1rem 2rem; background: linear-gradient(135deg, var(--accent-red) 0%, #8b1429 100%); color: white; border: none; border-radius: 8px; font-size: 1.1rem; font-weight: bold; cursor: pointer; }
+.flexRow { display: flex; gap: 0.5rem; align-items: center; }
+.flexGrow { flex: 1; }
+.copyBtn { padding: 0.75rem 1.5rem; background: var(--accent-green); color: white; border: none; border-radius: 8px; cursor: pointer; }
+.messageSuccess { padding: 1rem; background: #d4edda; border-radius: 8px; text-align: center; font-weight: bold; }
+.messageError { padding: 1rem; background: #f8d7da; border-radius: 8px; text-align: center; font-weight: bold; }

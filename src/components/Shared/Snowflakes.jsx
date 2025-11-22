@@ -1,33 +1,14 @@
-import { useEffect, useState } from 'react';
+import React from 'react';
 import styles from './Snowflakes.module.css';
 
 const Snowflakes = ({ count = 50 }) => {
-  const [snowflakes, setSnowflakes] = useState([]);
-
-  useEffect(() => {
-    const flakes = Array.from({ length: count }, (_, i) => ({
-      id: i,
-      left: Math.random() * 100,
-      animationDuration: 10 + Math.random() * 10,
-      animationDelay: Math.random() * 5,
-      fontSize: 0.5 + Math.random() * 1,
-    }));
-    setSnowflakes(flakes);
-  }, [count]);
+  // Assign a deterministic variant per index so we can avoid inline styles
+  const variants = Array.from({ length: count }, (_, i) => `variant${i % 10}`);
 
   return (
     <div className={styles.snowflakes} aria-hidden="true">
-      {snowflakes.map((flake) => (
-        <div
-          key={flake.id}
-          className={styles.snowflake}
-          style={{
-            left: `${flake.left}%`,
-            animationDuration: `${flake.animationDuration}s`,
-            animationDelay: `${flake.animationDelay}s`,
-            fontSize: `${flake.fontSize}em`,
-          }}
-        >
+      {variants.map((v, i) => (
+        <div key={i} className={`${styles.snowflake} ${styles[v]}`}>
           ❄
         </div>
       ))}

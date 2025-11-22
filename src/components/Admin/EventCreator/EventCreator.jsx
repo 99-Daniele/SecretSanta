@@ -103,7 +103,7 @@ const EventCreator = ({ onEventCreated, onCancel }) => {
       if (data) {
         onEventCreated(data);
       }
-    } catch (err) {
+    } catch {
       setError('Errore imprevisto durante la creazione');
     } finally {
       setLoading(false);

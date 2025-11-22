@@ -10,8 +10,8 @@ export const useEventStatus = (dataApertura) => {
 
   useEffect(() => {
     if (!dataApertura) {
-      setIsEventOpen(false);
-      return;
+      const t = setTimeout(() => setIsEventOpen(false), 0);
+      return () => clearTimeout(t);
     }
 
     const checkStatus = () => {
@@ -20,13 +20,16 @@ export const useEventStatus = (dataApertura) => {
       setIsEventOpen(now >= openingDate);
     };
 
-    // Initial check
-    checkStatus();
+    // Initial check (deferred)
+    const t2 = setTimeout(checkStatus, 0);
 
     // Check every minute
     const interval = setInterval(checkStatus, 60000);
 
-    return () => clearInterval(interval);
+    return () => {
+      clearInterval(interval);
+      clearTimeout(t2);
+    };
   }, [dataApertura]);
 
   return isEventOpen;

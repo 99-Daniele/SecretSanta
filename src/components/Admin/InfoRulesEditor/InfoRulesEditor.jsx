@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react';
 import { useEvent } from '../../../context/EventContext';
 import { generateEventCode } from '../../../utils/codeGenerator';
+import styles from './InfoRulesEditor.module.css';
 
 const DEFAULT_REGOLE = `🎁 REGOLE DEL SECRET SANTA
 
@@ -43,29 +44,30 @@ const InfoRulesEditor = () => {
   const [message, setMessage] = useState('');
 
   useEffect(() => {
-    if (currentEvent) {
+    if (!currentEvent) return;
+    // defer state update to avoid calling setState synchronously in effect
+    const t = setTimeout(() => {
       setFormData({
         nome_evento: currentEvent.nome_evento || '',
         event_code: currentEvent.event_code || '',
         anno: currentEvent.anno || new Date().getFullYear(),
         budget_min: currentEvent.budget_min || '',
         budget_max: currentEvent.budget_max || '',
-        data_apertura: currentEvent.data_apertura ?  new Date(currentEvent.data_apertura).toISOString().slice(0, 16) : '',
+        data_apertura: currentEvent.data_apertura ? new Date(currentEvent.data_apertura).toISOString().slice(0, 16) : '',
         regole_testo: currentEvent.regole_testo || DEFAULT_REGOLE,
         note_admin: currentEvent.note_admin || DEFAULT_NOTE,
       });
-    }
+    }, 0);
+    return () => clearTimeout(t);
   }, [currentEvent]);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
     setFormData(prev => {
       const updated = { ...prev, [name]: value };
-      
       if (name === 'nome_evento' && !updated.event_code) {
         updated.event_code = generateEventCode(value);
       }
-      
       return updated;
     });
   };
@@ -105,14 +107,12 @@ const InfoRulesEditor = () => {
   };
 
   return (
-    <div style={{ maxWidth: '800px', margin: '0 auto' }}>
-      <h1 style={{ fontSize: '2rem', marginBottom: '2rem', color: '#c41e3a' }}>
-        📋 Info & Regole Evento
-      </h1>
+    <div className={styles.container}>
+      <h1 className={styles.title}>📋 Info & Regole Evento</h1>
 
-      <form onSubmit={handleSave} style={{ display: 'flex', flexDirection: 'column', gap: '1.5rem' }}>
+      <form onSubmit={handleSave} className={styles.form}>
         <div>
-          <label style={{ fontWeight: 600, display: 'block', marginBottom: '0.5rem' }}>
+          <label className={styles.fieldLabel}>
             Nome Evento *
           </label>
           <input
@@ -120,47 +120,47 @@ const InfoRulesEditor = () => {
             value={formData.nome_evento}
             onChange={handleChange}
             required
-            style={{ width: '100%', padding: '0.75rem', border: '2px solid #e0e0e0', borderRadius: '8px', fontSize: '1rem' }}
+            className={styles.input}
           />
         </div>
 
         <div>
-          <label style={{ fontWeight: 600, display: 'block', marginBottom: '0.5rem' }}>
+          <label className={styles.fieldLabel}>
             Codice Evento
           </label>
-          <div style={{ display: 'flex', gap: '0.5rem' }}>
+          <div className={styles.flexRow}>
             <input
               name="event_code"
               value={formData.event_code}
               onChange={handleChange}
-              style={{ flex: 1, padding: '0.75rem', border: '2px solid #e0e0e0', borderRadius: '8px', fontSize: '1rem', fontFamily: 'monospace', fontWeight: 'bold' }}
+              className={`${styles.input} ${styles.monoInput} ${styles.flexGrow}`}
             />
-            <button type="button" onClick={copyCode} style={{ padding: '0.75rem 1.5rem', background: '#165b33', color: 'white', border: 'none', borderRadius: '8px', cursor: 'pointer' }}>
+            <button type="button" onClick={copyCode} className={styles.copyBtn}>
               📋 Copia
             </button>
           </div>
-          <small style={{ color: '#666', fontSize: '0.85rem' }}>
+          <small className={styles.smallNote}>
             I partecipanti useranno questo codice per accedere
           </small>
         </div>
 
-        <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr 1fr', gap: '1rem' }}>
+        <div className={styles.grid3}>
           <div>
-            <label style={{ fontWeight: 600, display: 'block', marginBottom: '0.5rem' }}>Anno</label>
-            <input name="anno" type="number" value={formData.anno} onChange={handleChange} style={{ width: '100%', padding: '0.75rem', border: '2px solid #e0e0e0', borderRadius: '8px' }} />
+            <label className={styles.fieldLabel}>Anno</label>
+            <input name="anno" type="number" value={formData.anno} onChange={handleChange} className={styles.input} />
           </div>
           <div>
-            <label style={{ fontWeight: 600, display: 'block', marginBottom: '0.5rem' }}>Budget Min (€)</label>
-            <input name="budget_min" type="number" step="0.01" value={formData.budget_min} onChange={handleChange} style={{ width: '100%', padding: '0.75rem', border: '2px solid #e0e0e0', borderRadius: '8px' }} />
+            <label className={styles.fieldLabel}>Budget Min (€)</label>
+            <input name="budget_min" type="number" step="0.01" value={formData.budget_min} onChange={handleChange} className={styles.input} />
           </div>
           <div>
-            <label style={{ fontWeight: 600, display: 'block', marginBottom: '0.5rem' }}>Budget Max (€)</label>
-            <input name="budget_max" type="number" step="0.01" value={formData.budget_max} onChange={handleChange} style={{ width: '100%', padding: '0.75rem', border: '2px solid #e0e0e0', borderRadius: '8px' }} />
+            <label className={styles.fieldLabel}>Budget Max (€)</label>
+            <input name="budget_max" type="number" step="0.01" value={formData.budget_max} onChange={handleChange} className={styles.input} />
           </div>
         </div>
 
         <div>
-          <label style={{ fontWeight: 600, display: 'block', marginBottom: '0.5rem' }}>
+          <label className={styles.fieldLabel}>
             Data e Ora Apertura Regali *
           </label>
           <input
@@ -169,12 +169,12 @@ const InfoRulesEditor = () => {
             value={formData.data_apertura}
             onChange={handleChange}
             required
-            style={{ width: '100%', padding: '0.75rem', border: '2px solid #e0e0e0', borderRadius: '8px', fontSize: '1rem' }}
+            className={styles.input}
           />
         </div>
 
         <div>
-          <label style={{ fontWeight: 600, display: 'block', marginBottom: '0.5rem' }}>
+          <label className={styles.fieldLabel}>
             Regole
           </label>
           <textarea
@@ -182,15 +182,15 @@ const InfoRulesEditor = () => {
             value={formData.regole_testo}
             onChange={handleChange}
             rows="10"
-            style={{ width: '100%', padding: '0.75rem', border: '2px solid #e0e0e0', borderRadius: '8px', fontSize: '1rem', fontFamily: 'inherit', resize: 'vertical' }}
+            className={styles.textarea}
           />
-          <small style={{ color: '#666', fontSize: '0.85rem' }}>
+          <small className={styles.smallNote}>
             Puoi modificare liberamente il testo delle regole
           </small>
         </div>
 
         <div>
-          <label style={{ fontWeight: 600, display: 'block', marginBottom: '0.5rem' }}>
+          <label className={styles.fieldLabel}>
             Note / Istruzioni
           </label>
           <textarea
@@ -198,15 +198,15 @@ const InfoRulesEditor = () => {
             value={formData.note_admin}
             onChange={handleChange}
             rows="8"
-            style={{ width: '100%', padding: '0.75rem', border: '2px solid #e0e0e0', borderRadius: '8px', fontSize: '1rem', fontFamily: 'inherit', resize: 'vertical' }}
+            className={styles.textarea}
           />
-          <small style={{ color: '#666', fontSize: '0.85rem' }}>
+          <small className={styles.smallNote}>
             Puoi personalizzare le istruzioni per i partecipanti
           </small>
         </div>
 
         {message && (
-          <div style={{ padding: '1rem', background: message.includes('✅') ? '#d4edda' : '#f8d7da', borderRadius: '8px', textAlign: 'center', fontWeight: 'bold' }}>
+          <div className={message.includes('\u2705') ? styles.messageSuccess : styles.messageError}>
             {message}
           </div>
         )}
@@ -214,7 +214,7 @@ const InfoRulesEditor = () => {
         <button
           type="submit"
           disabled={isSaving}
-          style={{ padding: '1rem 2rem', background: 'linear-gradient(135deg, #c41e3a 0%, #8b1429 100%)', color: 'white', border: 'none', borderRadius: '8px', fontSize: '1.1rem', fontWeight: 'bold', cursor: 'pointer' }}
+          className={styles.saveBtn}
         >
           {isSaving ? 'Salvataggio...' : '💾 Salva Modifiche'}
         </button>

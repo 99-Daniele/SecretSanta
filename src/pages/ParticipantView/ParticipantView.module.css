@@ -1,0 +1,94 @@
+:root {
+  --card-max-width: 800px;
+}
+
+.page {
+  min-height: 100vh;
+  background: var(--bg-secondary);
+  padding: 1.5rem;
+  padding-top: 80px;
+  color: var(--text-secondary);
+}
+
+.center {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.card {
+  background: var(--bg-primary);
+  border-radius: var(--border-radius-xl);
+  padding: 2.5rem;
+  box-shadow: var(--shadow-lg);
+  border: 1px solid var(--border-color);
+  text-align: center;
+}
+
+.iconCircle {
+  width: 80px;
+  height: 80px;
+  background: linear-gradient(135deg, var(--accent-green) 0%, var(--accent-green-dark) 100%);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0 auto 1.5rem;
+  font-size: 2.5rem;
+  box-shadow: var(--shadow-md);
+}
+
+.title {
+  font-size: 1.75rem;
+  color: var(--accent-green);
+  margin-bottom: 0.5rem;
+}
+
+.muted { color: var(--text-secondary); }
+
+.assignmentsWrapper { max-width: var(--card-max-width); margin: 0 auto; }
+
+.assignList { background: var(--bg-secondary); border-radius: var(--border-radius-lg); padding: 1.5rem; }
+
+.assignRow { padding: 1rem; background: var(--bg-primary); border-radius: var(--border-radius-md); margin-bottom: 0.75rem; display: flex; align-items: center; gap: 1rem; border: 1px solid var(--border-color); }
+
+.assignGiver { flex: 1; font-weight: 600; color: var(--text-primary); }
+.arrow { font-size: 1.5rem; color: var(--accent-red); }
+.assignReceiver { flex: 1; font-weight: 600; color: var(--accent-red); }
+
+.bigEmoji { font-size: 4rem; margin-bottom: 1rem; }
+
+.errorCard { max-width: 480px; }
+
+.primaryBtn {
+  display: inline-block;
+  width: 100%;
+  padding: 1.25rem;
+  background: linear-gradient(135deg, var(--accent-green) 0%, var(--accent-green-dark) 100%);
+  color: white;
+  border: none;
+  border-radius: var(--border-radius-md);
+  font-size: 1.15rem;
+  font-weight: 600;
+  cursor: pointer;
+  box-shadow: var(--shadow-md);
+  transition: all var(--transition-normal);
+}
+.primaryBtn:hover { transform: translateY(-2px); box-shadow: var(--shadow-lg); }
+
+.secondaryBtn { padding: 1.125rem 1.75rem; display: inline-block; background: linear-gradient(135deg, var(--accent-green) 0%, var(--accent-green-dark) 100%); color: white; border-radius: var(--border-radius-md); font-weight: 600; box-shadow: var(--shadow-md); }
+.secondaryBtn:hover { transform: translateY(-2px); box-shadow: var(--shadow-lg); }
+
+.placeholder { text-align: center; color: var(--text-secondary); padding: 2rem; }
+
+.revealBox { font-size: 3rem; font-weight: 700; color: var(--accent-red); margin-bottom: 2rem; padding: 2rem; background: linear-gradient(135deg, #fff5f5 0%, #ffe8e8 100%); border-radius: var(--border-radius-lg); border: 2px solid var(--accent-red-light); }
+
+.revealTitle { font-size: 1.35rem; color: var(--text-secondary); margin-bottom: 1.25rem; font-weight: 400; }
+
+.revealCardLarge { padding: 3rem; max-width: 680px; }
+
+.successBox { padding: 1.25rem; border-radius: var(--border-radius-md); color: var(--success-dark); border: 1px solid var(--success); background: var(--success-light); }
+
+.warningCard { max-width: 580px; }
+
+.lockedIcon { font-size: 4rem; margin-bottom: 1rem; }

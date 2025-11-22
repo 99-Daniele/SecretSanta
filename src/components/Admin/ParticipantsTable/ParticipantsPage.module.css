@@ -1,0 +1,114 @@
+.container {
+  max-width: 1200px;
+  margin: 0 auto;
+}
+.title {
+  font-size: 2rem;
+  margin-bottom: 2rem;
+  color: var(--accent-red);
+}
+.card {
+  background: white;
+  border-radius: 12px;
+  padding: 2rem;
+  margin-bottom: 2rem;
+}
+.cardHeadingSpacer {
+  margin-bottom: 1rem;
+}
+.formGrid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1rem;
+}
+.input {
+  padding: 0.75rem;
+  border: 2px solid var(--muted-border, #e0e0e0);
+  border-radius: 8px;
+}
+.submitPrimary {
+  grid-column: 1 / -1;
+  padding: 1rem;
+  background: var(--accent-green);
+  color: white;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  font-weight: bold;
+}
+.submitSecondary {
+  grid-column: 1 / -1;
+  padding: 0.75rem;
+  background: var(--muted-bg, #e0e0e0);
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+}
+.controlsRow {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 1rem;
+  align-items: center;
+}
+.copyBtn {
+  padding: 0.75rem 1.5rem;
+  background: var(--accent-green);
+  color: white;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+}
+.tableCard {
+  background: white;
+  border-radius: 12px;
+  overflow: hidden;
+}
+.table {
+  width: 100%;
+  border-collapse: collapse;
+}
+.theadRow {
+  background: var(--table-head-bg, #f5f5f5);
+}
+.thCell {
+  padding: 1rem;
+  text-align: left;
+}
+.textCenter {
+  text-align: center;
+}
+.tdCell {
+  padding: 1rem;
+}
+.trBorder {
+  border-top: 1px solid var(--muted-border, #e0e0e0);
+}
+.mono {
+  font-family: monospace;
+  font-weight: bold;
+}
+.actionBtn {
+  margin-right: 0.5rem;
+  padding: 0.5rem 1rem;
+  background: var(--accent-green);
+  color: white;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+}
+.warningBtn {
+  margin-right: 0.5rem;
+  padding: 0.5rem 1rem;
+  background: #ffd700;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+}
+.dangerBtn {
+  padding: 0.5rem 1rem;
+  background: var(--accent-red);
+  color: white;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+}

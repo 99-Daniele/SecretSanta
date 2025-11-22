@@ -1,22 +1,12 @@
 import { Navigate } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
+import styles from './ProtectedRoute.module.css';
 
 const ProtectedRoute = ({ children }) => {
   const { user, loading } = useAuth();
 
   if (loading) {
-    return (
-      <div style={{ 
-        display: 'flex', 
-        alignItems: 'center', 
-        justifyContent: 'center', 
-        minHeight: '100vh',
-        fontSize: '1.5rem',
-        color: '#666'
-      }}>
-        Caricamento...
-      </div>
-    );
+    return <div className={styles.loadingWrapper}>Caricamento...</div>;
   }
 
   if (!user) {

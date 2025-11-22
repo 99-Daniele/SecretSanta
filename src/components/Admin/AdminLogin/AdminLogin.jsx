@@ -35,7 +35,7 @@ const AdminLogin = () => {
       if (data) {
         navigate('/admin/dashboard');
       }
-    } catch (err) {
+    } catch {
       setError('Errore durante il login. Riprova.');
     } finally {
       setLoading(false);

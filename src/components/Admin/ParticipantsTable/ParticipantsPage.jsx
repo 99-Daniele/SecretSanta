@@ -1,8 +1,9 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import { useEvent } from '../../../context/EventContext';
 import { supabase } from '../../../utils/supabaseClient';
 import { generateParticipantCode } from '../../../utils/codeGenerator';
 import ConfirmDialog from '../../Shared/ConfirmDialog';
+import styles from './ParticipantsPage.module.css';
 
 const ParticipantsPage = () => {
   const { currentEvent } = useEvent();
@@ -12,16 +13,32 @@ const ParticipantsPage = () => {
   const [editingId, setEditingId] = useState(null);
   const [deleteId, setDeleteId] = useState(null);
 
-  const fetchParticipants = async () => {
+  const fetchParticipants = useCallback(async () => {
     if (!currentEvent) return;
     setLoading(true);
     const { data } = await supabase.from('participants').select('*').eq('event_id', currentEvent.id).order('created_at');
     setParticipants(data || []);
     setLoading(false);
-  };
+  }, [currentEvent]);
 
+  // fetchParticipants is stable via useCallback; run on mount/when currentEvent changes
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   useEffect(() => {
-    fetchParticipants();
+    let mounted = true;
+    (async () => {
+      if (!currentEvent) return;
+      // perform fetch with mounted guard to avoid setState on unmounted
+      try {
+        setLoading(true);
+        const { data } = await supabase.from('participants').select('*').eq('event_id', currentEvent.id).order('created_at');
+        if (!mounted) return;
+        setParticipants(data || []);
+      } finally {
+        if (mounted) setLoading(false);
+      }
+    })();
+
+    return () => { mounted = false; };
   }, [currentEvent]);
 
   const handleSubmit = async (e) => {
@@ -63,32 +80,32 @@ const ParticipantsPage = () => {
   };
 
   return (
-    <div style={{ maxWidth: '1200px', margin: '0 auto' }}>
-      <h1 style={{ fontSize: '2rem', marginBottom: '2rem', color: '#c41e3a' }}>👥 Gestione Partecipanti</h1>
+    <div className={styles.container}>
+      <h1 className={styles.title}>👥 Gestione Partecipanti</h1>
 
-      <div style={{ background: 'white', borderRadius: '12px', padding: '2rem', marginBottom: '2rem' }}>
-        <h2 style={{ marginBottom: '1rem' }}>{editingId ? 'Modifica' : 'Aggiungi'} Partecipante</h2>
-        <form onSubmit={handleSubmit} style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '1rem' }}>
-          <input placeholder="Nome *" value={formData.nome} onChange={(e) => setFormData({...formData, nome: e.target.value})} required style={{ padding: '0.75rem', border: '2px solid #e0e0e0', borderRadius: '8px' }} />
-          <input placeholder="Cognome *" value={formData.cognome} onChange={(e) => setFormData({...formData, cognome: e.target.value})} required style={{ padding: '0.75rem', border: '2px solid #e0e0e0', borderRadius: '8px' }} />
-          <input placeholder="Email" type="email" value={formData.email} onChange={(e) => setFormData({...formData, email: e.target.value})} style={{ padding: '0.75rem', border: '2px solid #e0e0e0', borderRadius: '8px' }} />
-          <input placeholder="Ruolo" value={formData.ruolo} onChange={(e) => setFormData({...formData, ruolo: e.target.value})} style={{ padding: '0.75rem', border: '2px solid #e0e0e0', borderRadius: '8px' }} />
-          <button type="submit" style={{ gridColumn: '1 / -1', padding: '1rem', background: '#165b33', color: 'white', border: 'none', borderRadius: '8px', cursor: 'pointer', fontWeight: 'bold' }}>
-            {editingId ? 'Aggiorna' : '➕ Aggiungi'}
+      <div className={styles.card}>
+        <h2 className={styles.cardHeadingSpacer}>{editingId ? 'Modifica' : 'Aggiungi'} Partecipante</h2>
+        <form onSubmit={handleSubmit} className={styles.formGrid}>
+          <input placeholder="Nome *" value={formData.nome} onChange={(e) => setFormData({...formData, nome: e.target.value})} required className={styles.input} />
+          <input placeholder="Cognome *" value={formData.cognome} onChange={(e) => setFormData({...formData, cognome: e.target.value})} required className={styles.input} />
+          <input placeholder="Email" type="email" value={formData.email} onChange={(e) => setFormData({...formData, email: e.target.value})} className={styles.input} />
+          <input placeholder="Ruolo" value={formData.ruolo} onChange={(e) => setFormData({...formData, ruolo: e.target.value})} className={styles.input} />
+          <button type="submit" className={styles.submitPrimary}>
+            {editingId ? 'Aggiorna' : '\u2795 Aggiungi'}
           </button>
           {editingId && (
-            <button type="button" onClick={() => { setEditingId(null); setFormData({ nome: '', cognome: '', email: '', ruolo: '' }); }} style={{ gridColumn: '1 / -1', padding: '0.75rem', background: '#e0e0e0', border: 'none', borderRadius: '8px', cursor: 'pointer' }}>
+            <button type="button" onClick={() => { setEditingId(null); setFormData({ nome: '', cognome: '', email: '', ruolo: '' }); }} className={styles.submitSecondary}>
               Annulla
             </button>
           )}
         </form>
       </div>
 
-      <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '1rem' }}>
+      <div className={styles.controlsRow}>
         <h2>Partecipanti ({participants.length})</h2>
         {participants.length > 0 && (
-          <button onClick={copyAllCodes} style={{ padding: '0.75rem 1.5rem', background: '#165b33', color: 'white', border: 'none', borderRadius: '8px', cursor: 'pointer' }}>
-            📋 Copia Tutti i Codici
+          <button onClick={copyAllCodes} className={styles.copyBtn}>
+            \ud83d\udccb Copia Tutti i Codici
           </button>
         )}
       </div>
@@ -96,37 +113,37 @@ const ParticipantsPage = () => {
       {loading ? (
         <div>Caricamento...</div>
       ) : (
-        <div style={{ background: 'white', borderRadius: '12px', overflow: 'hidden' }}>
-          <table style={{ width: '100%', borderCollapse: 'collapse' }}>
+        <div className={styles.tableCard}>
+          <table className={styles.table}>
             <thead>
-              <tr style={{ background: '#f5f5f5' }}>
-                <th style={{ padding: '1rem', textAlign: 'left' }}>Nome</th>
-                <th style={{ padding: '1rem', textAlign: 'left' }}>Codice</th>
-                <th style={{ padding: '1rem', textAlign: 'left' }}>Email</th>
-                <th style={{ padding: '1rem', textAlign: 'center' }}>Visualizzato</th>
-                <th style={{ padding: '1rem', textAlign: 'center' }}>Azioni</th>
+              <tr className={styles.theadRow}>
+                <th className={styles.thCell}>Nome</th>
+                <th className={styles.thCell}>Codice</th>
+                <th className={styles.thCell}>Email</th>
+                <th className={`${styles.thCell} ${styles.textCenter}`}>Visualizzato</th>
+                <th className={`${styles.thCell} ${styles.textCenter}`}>Azioni</th>
               </tr>
             </thead>
             <tbody>
               {participants.map(p => (
-                <tr key={p.id} style={{ borderTop: '1px solid #e0e0e0' }}>
-                  <td style={{ padding: '1rem' }}>{p.nome} {p.cognome}</td>
-                  <td style={{ padding: '1rem', fontFamily: 'monospace', fontWeight: 'bold' }}>{p.access_code}</td>
-                  <td style={{ padding: '1rem' }}>{p.email || '-'}</td>
-                  <td style={{ padding: '1rem', textAlign: 'center' }}>
-                    {p.has_viewed ? '✅' : '⬜'}
+                <tr key={p.id} className={styles.trBorder}>
+                  <td className={styles.tdCell}>{p.nome} {p.cognome}</td>
+                  <td className={`${styles.tdCell} ${styles.mono}`}>{p.access_code}</td>
+                  <td className={styles.tdCell}>{p.email || '-'}</td>
+                  <td className={`${styles.tdCell} ${styles.textCenter}`}>
+                    {p.has_viewed ? '\u2705' : '\u2b1c'}
                   </td>
-                  <td style={{ padding: '1rem', textAlign: 'center' }}>
-                    <button onClick={() => handleEdit(p)} style={{ marginRight: '0.5rem', padding: '0.5rem 1rem', background: '#165b33', color: 'white', border: 'none', borderRadius: '6px', cursor: 'pointer' }}>
-                      ✏️
+                  <td className={`${styles.tdCell} ${styles.textCenter}`}>
+                    <button onClick={() => handleEdit(p)} className={styles.actionBtn}>
+                      \u270f\ufe0f
                     </button>
                     {p.has_viewed && (
-                      <button onClick={() => handleResetView(p.id)} style={{ marginRight: '0.5rem', padding: '0.5rem 1rem', background: '#ffd700', border: 'none', borderRadius: '6px', cursor: 'pointer' }}>
-                        🔄
+                      <button onClick={() => handleResetView(p.id)} className={styles.warningBtn}>
+                        \ud83d\udd04
                       </button>
                     )}
-                    <button onClick={() => setDeleteId(p.id)} style={{ padding: '0.5rem 1rem', background: '#c41e3a', color: 'white', border: 'none', borderRadius: '6px', cursor: 'pointer' }}>
-                      🗑️
+                    <button onClick={() => setDeleteId(p.id)} className={styles.dangerBtn}>
+                      \ud83d\uddd1\ufe0f
                     </button>
                   </td>
                 </tr>

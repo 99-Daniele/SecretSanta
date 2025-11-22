@@ -16,8 +16,11 @@ export const useCountdown = (targetDate) => {
 
   useEffect(() => {
     if (!targetDate) {
-      setTimeLeft({ days: 0, hours: 0, minutes: 0, seconds: 0, isExpired: true });
-      return;
+      // defer to avoid synchronous setState in effect
+      const t = setTimeout(() => {
+        setTimeLeft({ days: 0, hours: 0, minutes: 0, seconds: 0, isExpired: true });
+      }, 0);
+      return () => clearTimeout(t);
     }
 
     const calculateTimeLeft = () => {
@@ -44,15 +47,18 @@ export const useCountdown = (targetDate) => {
       };
     };
 
-    // Initial calculation
-    setTimeLeft(calculateTimeLeft());
+  // Initial calculation (deferred to avoid sync setState inside effect)
+  const t2 = setTimeout(() => setTimeLeft(calculateTimeLeft()), 0);
 
     // Update every second
     const timer = setInterval(() => {
       setTimeLeft(calculateTimeLeft());
     }, 1000);
 
-    return () => clearInterval(timer);
+    return () => {
+      clearInterval(timer);
+      clearTimeout(t2);
+    };
   }, [targetDate]);
 
   return timeLeft;

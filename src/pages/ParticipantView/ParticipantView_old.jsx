@@ -7,6 +7,7 @@ import { sendResetRequestEmail } from '../../utils/emailService';
 import Snowflakes from '../../components/Shared/Snowflakes';
 import RulesPanel from '../../components/Shared/RulesPanel';
 import CountdownBar from '../../components/Shared/CountdownBar';
+import styles from './ParticipantView_old.module.css';
 
 const ParticipantView = () => {
   const { eventCode, participantCode } = useParams();
@@ -20,11 +21,6 @@ const ParticipantView = () => {
   const [resetRequested, setResetRequested] = useState(false);
   const isEventOpen = useEventStatus(event?.data_apertura);
   const [allAssignments, setAllAssignments] = useState([]);
-
-  useEffect(() => {
-    fetchData();
-  }, []);
-
   const fetchData = async () => {
     setLoading(true);
 
@@ -74,6 +70,17 @@ const ParticipantView = () => {
     setLoading(false);
   };
 
+  useEffect(() => {
+    let mounted = true;
+    (async () => {
+      if (!mounted) return;
+      await fetchData();
+    })();
+    return () => { mounted = false; };
+    // run only on mount
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
   const handleReveal = async () => {
     if (!participant || !assignment) return;
 
@@ -114,17 +121,17 @@ const ParticipantView = () => {
   };
 
   if (loading) {
-    return <div style={{ minHeight: '100vh', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '1.5rem' }}>Caricamento...</div>;
+    return <div className={styles.fullCenter}>Caricamento...</div>;
   }
 
   if (error) {
     return (
-      <div style={{ minHeight: '100vh', background: 'linear-gradient(135deg, #c41e3a 0%, #165b33 100%)', display: 'flex', alignItems: 'center', justifyContent: 'center', padding: '2rem' }}>
-        <div style={{ background: 'white', borderRadius: '16px', padding: '3rem', textAlign: 'center', maxWidth: '500px' }}>
-          <div style={{ fontSize: '5rem', marginBottom: '1rem' }}>⚠️</div>
-          <h1 style={{ color: '#c41e3a', marginBottom: '1rem' }}>Errore</h1>
-          <p style={{ fontSize: '1.2rem' }}>{error}</p>
-          <a href="/" style={{ display: 'inline-block', marginTop: '2rem', padding: '1rem 2rem', background: '#165b33', color: 'white', textDecoration: 'none', borderRadius: '8px' }}>
+      <div className={styles.heroGradient}>
+        <div className={styles.cardNoShadow}>
+          <div className={styles.bigIcon}>⚠️</div>
+          <h1 className={styles.titleError}>Errore</h1>
+            <p className={styles.errorText}>{error}</p>
+          <a href="/" className={styles.btnFull + ' ' + styles.btnGreenGradient + ' ' + styles.linkButton}>
             ← Torna alla Home
           </a>
         </div>
@@ -135,24 +142,24 @@ const ParticipantView = () => {
   // DOPO DATA APERTURA
   if (isEventOpen) {
     return (
-      <div style={{ minHeight: '100vh', background: 'linear-gradient(135deg, #c41e3a 0%, #165b33 100%)', padding: '2rem', position: 'relative', overflow: 'hidden' }}>
+      <div className={styles.heroGradient}>
         <Snowflakes count={50} />
         <RulesPanel event={event} />
         
-        <div style={{ maxWidth: '800px', margin: '0 auto', position: 'relative', zIndex: 10 }}>
-          <div style={{ background: 'white', borderRadius: '16px', padding: '3rem', boxShadow: '0 20px 60px rgba(0, 0, 0, 0.3)' }}>
-            <div style={{ textAlign: 'center', marginBottom: '2rem' }}>
-              <div style={{ fontSize: '4rem', marginBottom: '1rem' }}>🎄</div>
-              <h1 style={{ fontSize: '2rem', color: '#165b33', marginBottom: '0.5rem' }}>Il Secret Santa è concluso!</h1>
-              <p style={{ color: '#666' }}>Ecco tutti gli abbinamenti:</p>
+        <div className={styles.containerInner}>
+          <div className={styles.cardShadow}>
+            <div className={styles.centerText}>
+              <div className={styles.bigIcon}>🎄</div>
+              <h1 className={styles.titlePrimary}>Il Secret Santa è concluso!</h1>
+              <p className={styles.muted}>Ecco tutti gli abbinamenti:</p>
             </div>
 
-            <div style={{ background: '#f5f5f5', borderRadius: '12px', padding: '2rem' }}>
+            <div className={styles.listBox}>
               {allAssignments.map((a, i) => (
-                <div key={i} style={{ padding: '1rem', background: 'white', borderRadius: '8px', marginBottom: '0.75rem', display: 'flex', alignItems: 'center', gap: '1rem' }}>
-                  <div style={{ flex: 1, fontWeight: 'bold', color: '#333' }}>{a.giver}</div>
-                  <div style={{ fontSize: '1.5rem' }}>→</div>
-                  <div style={{ flex: 1, fontWeight: 'bold', color: '#c41e3a' }}>{a.receiver}</div>
+                <div key={i} className={styles.assignRow}>
+                  <div className={styles.assignGiver}>{a.giver}</div>
+                  <div className={styles.arrow}>→</div>
+                  <div className={styles.assignReceiver}>{a.receiver}</div>
                 </div>
               ))}
             </div>
@@ -165,18 +172,18 @@ const ParticipantView = () => {
   // ESTRAZIONE NON ANCORA EFFETTUATA
   if (!event.extraction_done) {
     return (
-      <div style={{ minHeight: '100vh', background: 'linear-gradient(135deg, #c41e3a 0%, #165b33 100%)', display: 'flex', alignItems: 'center', justifyContent: 'center', padding: '2rem', position: 'relative', overflow: 'hidden' }}>
+      <div className={styles.heroGradient}>
         <Snowflakes count={50} />
         <RulesPanel event={event} />
         
-        <div style={{ background: 'white', borderRadius: '16px', padding: '3rem', maxWidth: '600px', boxShadow: '0 20px 60px rgba(0, 0, 0, 0.3)', position: 'relative', zIndex: 10, textAlign: 'center' }}>
-          <div style={{ fontSize: '5rem', marginBottom: '1rem' }}>⏳</div>
-          <h1 style={{ color: '#c41e3a', fontSize: '2rem', marginBottom: '1rem' }}>Estrazione non ancora effettuata</h1>
-          <p style={{ fontSize: '1.1rem', color: '#666', marginBottom: '2rem' }}>
+        <div className={styles.cardNoShadow}>
+          <div className={styles.bigIcon}>⏳</div>
+          <h1 className={styles.titleError}>Estrazione non ancora effettuata</h1>
+          <p className={styles.muted}>
             L'organizzatore non ha ancora effettuato l'estrazione del Secret Santa.<br/>
             Riprova più tardi!
           </p>
-          <a href="/" style={{ display: 'inline-block', padding: '1rem 2rem', background: '#165b33', color: 'white', textDecoration: 'none', borderRadius: '8px', fontWeight: 'bold' }}>
+              <a href="/" className={styles.btnFull + ' ' + styles.btnGreenGradient + ' ' + styles.boldLink}>
             ← Torna alla Home
           </a>
         </div>
@@ -188,15 +195,15 @@ const ParticipantView = () => {
   if (!participant.has_viewed && !revealed) {
     if (showWarning) {
       return (
-        <div style={{ minHeight: '100vh', background: 'linear-gradient(135deg, #c41e3a 0%, #165b33 100%)', display: 'flex', alignItems: 'center', justifyContent: 'center', padding: '2rem', position: 'relative', overflow: 'hidden' }}>
+        <div className={styles.heroGradient}>
           <Snowflakes count={50} />
           <RulesPanel event={event} />
           
-          <div style={{ background: 'white', borderRadius: '16px', padding: '3rem', maxWidth: '600px', boxShadow: '0 20px 60px rgba(0, 0, 0, 0.3)', position: 'relative', zIndex: 10 }}>
-            <div style={{ textAlign: 'center', marginBottom: '2rem' }}>
-              <div style={{ fontSize: '5rem', marginBottom: '1rem' }}>⚠️</div>
-              <h1 style={{ color: '#c41e3a', fontSize: '2rem', marginBottom: '1rem' }}>Attenzione!</h1>
-              <div style={{ fontSize: '1.2rem', lineHeight: '1.6', marginBottom: '2rem' }}>
+          <div className={styles.cardShadow}>
+            <div className={styles.centerText}>
+              <div className={styles.bigIcon}>⚠️</div>
+              <h1 className={styles.titleError}>Attenzione!</h1>
+                <div className={styles.contentText}>
                 Potrai vedere il tuo abbinamento <strong>UNA SOLA VOLTA</strong>.<br/>
                 Assicurati di segnarti il nome!
               </div>
@@ -204,7 +211,7 @@ const ParticipantView = () => {
 
             <button
               onClick={() => setShowWarning(false)}
-              style={{ width: '100%', padding: '1.5rem', background: 'linear-gradient(135deg, #165b33 0%, #0d3d23 100%)', color: 'white', border: 'none', borderRadius: '8px', fontSize: '1.25rem', fontWeight: 'bold', cursor: 'pointer' }}
+              className={styles.btnFull + ' ' + styles.btnGreenGradient}
             >
               🎁 Rivela il mio Secret Santa
             </button>
@@ -215,30 +222,30 @@ const ParticipantView = () => {
 
     // REVEAL - Mostra il nome
     return (
-      <div style={{ minHeight: '100vh', background: 'linear-gradient(135deg, #165b33 0%, #c41e3a 100%)', display: 'flex', alignItems: 'center', justifyContent: 'center', padding: '2rem', position: 'relative', overflow: 'hidden' }}>
+      <div className={styles.heroGradient}>
         <Snowflakes count={100} />
         <RulesPanel event={event} />
         
-        <div style={{ background: 'white', borderRadius: '16px', padding: '4rem', maxWidth: '700px', boxShadow: '0 20px 60px rgba(0, 0, 0, 0.3)', position: 'relative', zIndex: 10, textAlign: 'center' }}>
-          <div style={{ fontSize: '6rem', marginBottom: '2rem', animation: 'bounce 1s infinite' }}>🎁</div>
+        <div className={styles.cardShadow}>
+          <div className={styles.hugeIcon}>🎁</div>
           
-          <h1 style={{ fontSize: '1.5rem', color: '#666', marginBottom: '1rem' }}>
+          <h1 className={styles.subtitle}>
             Ciao <strong>{participant.nome}</strong>!<br/>
             Devi fare un regalo a:
           </h1>
           
-          <div style={{ fontSize: '3.5rem', fontWeight: 'bold', color: '#c41e3a', marginBottom: '2rem', padding: '2rem', background: 'linear-gradient(135deg, #fff5f5 0%, #ffe5e5 100%)', borderRadius: '12px' }}>
+          <div className={styles.revealBox}>
             {getReceiverName()}
           </div>
 
           <button
             onClick={handleReveal}
-            style={{ padding: '1.5rem 3rem', background: 'linear-gradient(135deg, #165b33 0%, #0d3d23 100%)', color: 'white', border: 'none', borderRadius: '8px', fontSize: '1.25rem', fontWeight: 'bold', cursor: 'pointer' }}
+            className={`${styles.btnFull} ${styles.btnGreenGradient}`}
           >
             ✅ Ho capito!
           </button>
 
-          <p style={{ marginTop: '2rem', color: '#666', fontSize: '0.9rem' }}>
+          <p className={styles.smallNote}>
             Ricorda: non potrai più vedere questo abbinamento!
           </p>
         </div>
@@ -248,25 +255,25 @@ const ParticipantView = () => {
 
   // PRIMA DATA APERTURA - HA GIÀ VISTO (o ha premuto "Ho capito")
   return (
-    <div style={{ minHeight: '100vh', background: 'linear-gradient(135deg, #c41e3a 0%, #165b33 100%)', display: 'flex', alignItems: 'center', justifyContent: 'center', padding: '2rem', position: 'relative', overflow: 'hidden' }}>
+    <div className={styles.heroGradient}>
       <Snowflakes count={50} />
       <RulesPanel event={event} />
       
-      <div style={{ background: 'white', borderRadius: '16px', padding: '3rem', maxWidth: '600px', boxShadow: '0 20px 60px rgba(0, 0, 0, 0.3)', position: 'relative', zIndex: 10, textAlign: 'center' }}>
-        <div style={{ fontSize: '5rem', marginBottom: '1rem' }}>🔒</div>
-        <h1 style={{ color: '#c41e3a', fontSize: '2rem', marginBottom: '1rem' }}>Hai già visualizzato</h1>
-        <p style={{ fontSize: '1.1rem', color: '#666', marginBottom: '2rem' }}>
+      <div className={styles.cardShadow}>
+        <div className={styles.bigIcon}>🔒</div>
+        <h1 className={styles.titleError}>Hai già visualizzato</h1>
+        <p className={`${styles.muted} ${styles.smallNote}`}>
           Hai già visto il tuo abbinamento. Se hai bisogno di rivederlo, richiedi il ripristino all'organizzatore.
         </p>
 
         {resetRequested ? (
-          <div style={{ padding: '1.5rem', background: '#d4edda', borderRadius: '8px', color: '#155724' }}>
+          <div className={styles.lockedBox}>
             ✅ Richiesta inviata! L'organizzatore riceverà una notifica.
           </div>
         ) : (
           <button
             onClick={handleResetRequest}
-            style={{ padding: '1.25rem 2rem', background: 'linear-gradient(135deg, #165b33 0%, #0d3d23 100%)', color: 'white', border: 'none', borderRadius: '8px', fontSize: '1.1rem', fontWeight: 'bold', cursor: 'pointer' }}
+            className={`${styles.btnFull} ${styles.btnGreenGradient}`}
           >
             📧 Richiedi Ripristino
           </button>
