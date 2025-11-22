@@ -1,13 +1,17 @@
 import { useState } from 'react';
-import Countdown from './Countdown';
 import styles from './RulesPanel.module.css';
 
 const RulesPanel = ({ event, loading = false }) => {
   const [isOpen, setIsOpen] = useState(false);
+  const [activeSection, setActiveSection] = useState(null); // 'info', 'regole', 'istruzioni'
 
   if (!event && !loading) {
     return null;
   }
+
+  const toggleSection = (section) => {
+    setActiveSection(activeSection === section ? null : section);
+  };
 
   if (!isOpen) {
     return (
@@ -16,7 +20,7 @@ const RulesPanel = ({ event, loading = false }) => {
           className={styles.collapsedButton}
           onClick={() => setIsOpen(true)}
         >
-          📋 Info & Regole
+          Info & Regole
         </button>
       </div>
     );
@@ -24,10 +28,10 @@ const RulesPanel = ({ event, loading = false }) => {
 
   return (
     <div className={styles.rulesPanel}>
-      <div className={styles.expandedPanel}>
+      <div className={`${styles.expandedPanel} ${isOpen ? styles.panelVisible : ''}`}>
         <div className={styles.header}>
           <h2 className={styles.title}>
-            🎅 {event?.nome_evento || 'Secret Santa'}
+            {event?.nome_evento || 'Secret Santa'}
           </h2>
           <button
             className={styles.closeButton}
@@ -43,48 +47,69 @@ const RulesPanel = ({ event, loading = false }) => {
             <div className={styles.loading}>Caricamento...</div>
           ) : (
             <>
-              {event?.budget_min && event?.budget_max && (
-                <div className={styles.section}>
-                  <div className={styles.sectionTitle}>
-                    💰 Budget Suggerito
-                  </div>
-                  <div className={styles.sectionContent}>
-                    <div className={styles.budget}>
-                      €{event.budget_min} - €{event.budget_max}
+              {/* INFO EVENTO */}
+              <div className={styles.accordionItem}>
+                <button
+                  className={`${styles.accordionHeader} ${activeSection === 'info' ? styles.active : ''}`}
+                  onClick={() => toggleSection('info')}
+                >
+                  <span>Informazioni Evento</span>
+                  <span className={styles.accordionIcon}>{activeSection === 'info' ? '−' : '+'}</span>
+                </button>
+                <div className={`${styles.accordionContent} ${activeSection === 'info' ? styles.accordionOpen : ''}`}>
+                  {event?.budget_min && event?.budget_max && (
+                    <div className={styles.infoItem}>
+                      <strong>Budget:</strong> €{event.budget_min} - €{event.budget_max}
                     </div>
-                  </div>
+                  )}
+                  {event?.anno && (
+                    <div className={styles.infoItem}>
+                      <strong>Anno:</strong> {event.anno}
+                    </div>
+                  )}
+                  {event?.data_apertura && (
+                    <div className={styles.infoItem}>
+                      <strong>Apertura regali:</strong>{' '}
+                      {new Date(event.data_apertura).toLocaleDateString('it-IT', {
+                        day: '2-digit',
+                        month: 'long',
+                        year: 'numeric',
+                        hour: '2-digit',
+                        minute: '2-digit',
+                      })}
+                    </div>
+                  )}
                 </div>
-              )}
+              </div>
 
-              {event?.data_apertura && (
-                <div className={styles.section}>
-                  <div className={styles.sectionTitle}>
-                    ⏰ Apertura Regali
-                  </div>
-                  <div className={styles.sectionContent}>
-                    <Countdown targetDate={event.data_apertura} />
-                  </div>
-                </div>
-              )}
-
+              {/* REGOLE */}
               {event?.regole_testo && (
-                <div className={styles.section}>
-                  <div className={styles.sectionTitle}>
-                    📜 Regole
-                  </div>
-                  <div className={styles.sectionContent}>
-                    <div className={styles.notes}>{event.regole_testo}</div>
+                <div className={styles.accordionItem}>
+                  <button
+                    className={`${styles.accordionHeader} ${activeSection === 'regole' ? styles.active : ''}`}
+                    onClick={() => toggleSection('regole')}
+                  >
+                    <span>Regole</span>
+                    <span className={styles.accordionIcon}>{activeSection === 'regole' ? '−' : '+'}</span>
+                  </button>
+                  <div className={`${styles.accordionContent} ${activeSection === 'regole' ? styles.accordionOpen : ''}`}>
+                    <div className={styles.textContent}>{event.regole_testo}</div>
                   </div>
                 </div>
               )}
 
+              {/* ISTRUZIONI */}
               {event?.note_admin && (
-                <div className={styles.section}>
-                  <div className={styles.sectionTitle}>
-                    📝 Note Importanti
-                  </div>
-                  <div className={styles.sectionContent}>
-                    <div className={styles.notes}>{event.note_admin}</div>
+                <div className={styles.accordionItem}>
+                  <button
+                    className={`${styles.accordionHeader} ${activeSection === 'istruzioni' ? styles.active : ''}`}
+                    onClick={() => toggleSection('istruzioni')}
+                  >
+                    <span>Istruzioni</span>
+                    <span className={styles.accordionIcon}>{activeSection === 'istruzioni' ? '−' : '+'}</span>
+                  </button>
+                  <div className={`${styles.accordionContent} ${activeSection === 'istruzioni' ? styles.accordionOpen : ''}`}>
+                    <div className={styles.textContent}>{event.note_admin}</div>
                   </div>
                 </div>
               )}

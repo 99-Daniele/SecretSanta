@@ -6,6 +6,7 @@ import { useEventStatus } from '../../hooks/useEventStatus';
 import { sendResetRequestEmail } from '../../utils/emailService';
 import Snowflakes from '../../components/Shared/Snowflakes';
 import RulesPanel from '../../components/Shared/RulesPanel';
+import CountdownBar from '../../components/Shared/CountdownBar';
 
 const ParticipantView = () => {
   const { eventCode, participantCode } = useParams();
@@ -43,6 +44,13 @@ const ParticipantView = () => {
     }
     setParticipant(partData);
 
+    // Controlla se estrazione è stata fatta
+    if (!eventData.extraction_done) {
+      // Non cercare assignment se non c'è stata estrazione
+      setLoading(false);
+      return;
+    }
+
     const { data: assignData } = await supabase.from('assignments').select('*').eq('event_id', eventData.id).eq('giver_id', partData.id).single();
     if (assignData) {
       setAssignment(assignData);
@@ -69,11 +77,15 @@ const ParticipantView = () => {
   const handleReveal = async () => {
     if (!participant || !assignment) return;
 
+    // Setta has_viewed e nasconde il nome
+    await supabase.from('participants').update({ 
+      has_viewed: true, 
+      viewed_at: new Date().toISOString() 
+    }).eq('id', participant.id);
+
+    // Aggiorna lo stato locale
+    setParticipant({ ...participant, has_viewed: true });
     setRevealed(true);
-    
-    if (!participant.has_viewed) {
-      await supabase.from('participants').update({ has_viewed: true, viewed_at: new Date().toISOString() }).eq('id', participant.id);
-    }
   };
 
   const handleResetRequest = async () => {
@@ -150,6 +162,28 @@ const ParticipantView = () => {
     );
   }
 
+  // ESTRAZIONE NON ANCORA EFFETTUATA
+  if (!event.extraction_done) {
+    return (
+      <div style={{ minHeight: '100vh', background: 'linear-gradient(135deg, #c41e3a 0%, #165b33 100%)', display: 'flex', alignItems: 'center', justifyContent: 'center', padding: '2rem', position: 'relative', overflow: 'hidden' }}>
+        <Snowflakes count={50} />
+        <RulesPanel event={event} />
+        
+        <div style={{ background: 'white', borderRadius: '16px', padding: '3rem', maxWidth: '600px', boxShadow: '0 20px 60px rgba(0, 0, 0, 0.3)', position: 'relative', zIndex: 10, textAlign: 'center' }}>
+          <div style={{ fontSize: '5rem', marginBottom: '1rem' }}>⏳</div>
+          <h1 style={{ color: '#c41e3a', fontSize: '2rem', marginBottom: '1rem' }}>Estrazione non ancora effettuata</h1>
+          <p style={{ fontSize: '1.1rem', color: '#666', marginBottom: '2rem' }}>
+            L'organizzatore non ha ancora effettuato l'estrazione del Secret Santa.<br/>
+            Riprova più tardi!
+          </p>
+          <a href="/" style={{ display: 'inline-block', padding: '1rem 2rem', background: '#165b33', color: 'white', textDecoration: 'none', borderRadius: '8px', fontWeight: 'bold' }}>
+            ← Torna alla Home
+          </a>
+        </div>
+      </div>
+    );
+  }
+
   // PRIMA DATA APERTURA - NON HA ANCORA VISTO
   if (!participant.has_viewed && !revealed) {
     if (showWarning) {
@@ -179,6 +213,7 @@ const ParticipantView = () => {
       );
     }
 
+    // REVEAL - Mostra il nome
     return (
       <div style={{ minHeight: '100vh', background: 'linear-gradient(135deg, #165b33 0%, #c41e3a 100%)', display: 'flex', alignItems: 'center', justifyContent: 'center', padding: '2rem', position: 'relative', overflow: 'hidden' }}>
         <Snowflakes count={100} />
@@ -211,7 +246,7 @@ const ParticipantView = () => {
     );
   }
 
-  // PRIMA DATA APERTURA - HA GIÀ VISTO
+  // PRIMA DATA APERTURA - HA GIÀ VISTO (o ha premuto "Ho capito")
   return (
     <div style={{ minHeight: '100vh', background: 'linear-gradient(135deg, #c41e3a 0%, #165b33 100%)', display: 'flex', alignItems: 'center', justifyContent: 'center', padding: '2rem', position: 'relative', overflow: 'hidden' }}>
       <Snowflakes count={50} />
