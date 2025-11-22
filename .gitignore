@@ -35,3 +35,6 @@ dist-ssr
 
 # Vercel
 .vercel
+
+# Project specifications (local only)
+SECRET_SANTA_SPEC.md
