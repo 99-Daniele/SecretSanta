@@ -1,11 +1,11 @@
 import { useState } from 'react';
-import { useTheme } from '../../context/ThemeContext';
+// ...existing code...
 import CountdownBar from './CountdownBar';
 import RulesPanel from './RulesPanel';
 import styles from './TopBar.module.css';
 
 const TopBar = ({ eventName, targetDate, event, participant }) => {
-  const { theme, toggleTheme } = useTheme();
+  // ...existing code...
   const [showRules, setShowRules] = useState(false);
   const [showUserMenu, setShowUserMenu] = useState(false);
 
@@ -24,19 +24,9 @@ const TopBar = ({ eventName, targetDate, event, participant }) => {
   return (
     <>
       <div className={styles.topBar}>
-        {/* Left section: Event name + Theme toggle */}
         <div className={styles.leftSection}>
           <span className={styles.eventName}>{eventName}</span>
-          <button
-            onClick={toggleTheme}
-            className={styles.themeToggle}
-            aria-label={`Passa a tema ${theme === 'light' ? 'scuro' : 'chiaro'}`}
-            title={`Tema ${theme === 'light' ? 'chiaro' : 'scuro'} attivo`}
-          >
-            <span className={styles.themeIcon}>
-              {theme === 'light' ? '🌙' : '☀️'}
-            </span>
-          </button>
+          {/* Theme toggle moved to a floating control in the app (bottom-right) */}
         </div>
 
         {/* Center section: Countdown */}
@@ -50,7 +40,6 @@ const TopBar = ({ eventName, targetDate, event, participant }) => {
             onClick={() => setShowRules(!showRules)}
             className={styles.rulesButton}
           >
-            <span className={styles.rulesIcon}>ℹ️</span>
             <span className={styles.rulesText}>Info</span>
           </button>
 

@@ -15,6 +15,7 @@ import ParticipantsPage from './components/Admin/ParticipantsTable/ParticipantsP
 import ExtractionPage from './components/Admin/ExtractionPage/ExtractionPage';
 
 import './styles/globals.css';
+import ThemeToggle from './components/Shared/ThemeToggle';
 
 function App() {
   return (
@@ -22,6 +23,7 @@ function App() {
       <AuthProvider>
         <EventProvider>
           <Router>
+          <ThemeToggle />
           <Routes>
             {/* Public Routes */}
             <Route path="/" element={<HomePage />} />
