@@ -80,7 +80,9 @@ Ci vediamo alla festa! 🎅✨
 ### 4. Notifiche/Condivisione
 - [x] **Accesso con doppio codice**: Codice Evento + Codice Partecipante (NOMECOGNOME)
 - [x] **Sito web interattivo** - interfaccia per inserire i codici e vedere l'abbinamento
-- [x] **Visualizzazione una sola volta** - dopo aver visto, il partecipante non può più vedere (salvo reset admin)
+- [x] **Blocco se estrazione non fatta** - messaggio "Estrazione non ancora effettuata"
+- [x] **Visualizzazione controllata** - warning + reveal + conferma "Ho capito"
+- [x] **Sistema "Ho capito"** - dopo conferma, nome nascosto e has_viewed=true
 - [x] **Warning chiaro** - messaggio "Potrai vedere l'abbinamento UNA SOLA VOLTA"
 - [x] **Richiesta ripristino** - pulsante per inviare email notifica all'admin
 - [x] **Admin riceve email** - notifica quando un partecipante chiede ripristino
@@ -95,18 +97,49 @@ Ci vediamo alla festa! 🎅✨
 
 ## UI/UX
 
+### Design System
+
+**Palette Colori (Elegante & Professionale):**
+- Primary Dark: #1a2332 (navy scuro)
+- Primary Navy: #2c3e50 (navy)
+- Primary Blue: #34495e (blu)
+- Accent Burgundy: #8b4049 (burgundy)
+- Accent Wine: #a85860 (vino)
+- Accent Rose: #c9999e (rosa)
+- Neutrals: bianco, grigio chiaro, grigio medio, charcoal
+
+**Principi Design:**
+- Stile elegante e professionale
+- Emoji ridotte al minimo (solo icone chiave)
+- Contrasti migliorati (no rosso/verde insieme)
+- Ombre morbide e transizioni fluide
+- Typography pulita e leggibile
+- Mobile-first responsive
+
 ### Pagine/Sezioni
 
 **LAYOUT GLOBALE:**
-- **Pannello Regole** (collapsible/apribile) - sempre accessibile in tutte le pagine
-  - Mostra: nome evento, budget, countdown, note/istruzioni
+- **Countdown Bar** (sempre visibile in alto) - mostra nome evento e countdown
+  - Sfondo navy scuro (#2c3e50)
+  - Sempre fissato in alto (fixed top)
+  - Non nascondibile
+- **Pannello Info/Regole/Istruzioni** (collapsible/apribile - top right)
+  - Accordion con 3 sezioni separate:
+    1. Info Evento (budget, anno, data apertura)
+    2. Regole (testo regole personalizzabile)
+    3. Istruzioni (note admin personalizzabili)
+  - Animazioni pop-in/pop-out per sezioni
+  - Non include più il countdown (spostato in barra top)
   - Visibile anche senza login
 
 1. **Home Pubblica - Partecipanti**
    - Benvenuto al Secret Santa
+   - Icona regalo in cerchio burgundy
    - **Campo 1**: Inserire codice evento
    - **Campo 2**: Inserire codice partecipante (NOMECOGNOME)
+   - Pulsante "Accedi" (senza emoji)
    - Link discreto per accesso admin in basso
+   - Design pulito, professionale, meno emoji
    
 2. **Dashboard Admin** (protetta - multi-pagina)
    
@@ -197,15 +230,20 @@ Ci vediamo alla festa! 🎅✨
 ### Scenario 2: Partecipante (Prima della data apertura)
 1. Riceve codice evento + codice personale dall'organizzatore
 2. Va sul sito web dell'applicazione
-3. **Apre pannello regole** (opzionale) - vede budget, countdown, istruzioni
-4. Inserisce **codice evento**
-5. Inserisce **codice partecipante** (NOMECOGNOME)
-6. **WARNING CHIARO**: "⚠️ Potrai vedere il tuo Secret Santa UNA SOLA VOLTA! Assicurati di segnarti il nome."
-7. Clicca "Rivela il mio Secret Santa"
-8. **Animazione reveal** → vede a chi deve fare il regalo
-9. **Sistema registra la visualizzazione** (`has_viewed = true`, `viewed_at = now()`)
-10. Se torna dopo: vede "Hai già visualizzato" + pulsante "Richiedi Ripristino"
-11. Se clicca ripristino: email inviata all'admin con notifica
+3. **Vede Countdown Bar** in alto con tempo rimanente
+4. **Può aprire pannello Info/Regole/Istruzioni** (opzionale) con accordion
+5. Inserisce **codice evento**
+6. Inserisce **codice partecipante** (NOMECOGNOME)
+7. **CONTROLLO**: Se estrazione non fatta → vede messaggio "Estrazione non ancora effettuata"
+8. **CONTROLLO**: Se estrazione fatta → procede
+9. **WARNING CHIARO**: "⚠ Potrai vedere il tuo Secret Santa UNA SOLA VOLTA! Assicurati di segnarti il nome."
+10. Clicca "Rivela il mio Secret Santa"
+11. **Animazione reveal** → vede a chi deve fare il regalo
+12. Pulsante **"Ho capito!"** visibile
+13. Clicca "Ho capito!" → **Sistema registra la visualizzazione** (`has_viewed = true`, `viewed_at = now()`)
+14. **Nome nascosto** - schermata cambia mostrando solo "Hai già visualizzato"
+15. Se torna dopo: vede "Hai già visualizzato" + pulsante "Richiedi Ripristino"
+16. Se clicca ripristino: email inviata all'admin con notifica
 
 ### Scenario 3: Partecipante (Dopo la data apertura)
 1. Inserisce codice evento + codice personale
@@ -508,11 +546,46 @@ src/
 
 1. **Autenticazione Partecipanti**: Doppio codice (evento + NOMECOGNOME)
 2. **Codice Partecipante**: Formato NOMECOGNOME (uppercase, editabile da admin)
-3. **Pannello Regole**: Globale, apribile, accessibile sempre (anche senza login)
-4. **Dashboard Admin**: Multi-pagina (Selezione Eventi / Info & Regole / Partecipanti / Estrazione)
-5. **Visualizzazione Post-Evento**: Dopo data_apertura TUTTI vedono TUTTI gli abbinamenti
-6. **Richieste Ripristino**: Pulsante partecipante → email admin via Resend
-7. **Eliminazione**: Hard delete con conferma (no soft delete, no esportazione)
-8. **Estrazione Bloccata**: Se < 3 partecipanti → pulsante disabilitato + errore
-9. **Deploy**: Vercel (hosting gratuito per sito pubblico)
-10. **Codice Evento**: Generato automaticamente da nome evento (es. FAMIGLIA2025)
+3. **Pannello Info/Regole/Istruzioni**: Accordion con 3 sezioni, apribile, accessibile sempre
+4. **Countdown**: Sempre visibile in barra top (fixed), non più nel pannello collapsible
+5. **Dashboard Admin**: Multi-pagina (Selezione Eventi / Info & Regole / Partecipanti / Estrazione)
+6. **Visualizzazione Post-Evento**: Dopo data_apertura TUTTI vedono TUTTI gli abbinamenti
+7. **Richieste Ripristino**: Pulsante partecipante → email admin via Resend
+8. **Eliminazione**: Hard delete con conferma (no soft delete, no esportazione)
+9. **Estrazione Bloccata**: Se < 3 partecipanti → pulsante disabilitato + errore
+10. **Deploy**: Vercel (hosting gratuito per sito pubblico)
+11. **Codice Evento**: Generato automaticamente da nome evento (es. FAMIGLIA2025)
+12. **Blocco Visualizzazione**: Se extraction_done=false, messaggio "Estrazione non ancora effettuata"
+13. **Sistema "Ho capito"**: Dopo reveal, conferma richiesta prima di settare has_viewed
+14. **Design Professionale**: Palette navy + burgundy, emoji ridotte, contrasti migliorati
+
+---
+
+## 📝 Changelog Implementazione
+
+### [1.2.0] - 22 Nov 2025 - Bug Fixes & Redesign
+
+**Bug Fixes:**
+- ✅ Fix: Blocco visualizzazione partecipante se estrazione non ancora effettuata
+- ✅ Fix: Sistema conferma "Ho capito" dopo reveal - nome nascosto solo dopo conferma
+- ✅ Fix: has_viewed settato solo dopo click su "Ho capito"
+- ✅ Fix: Messaggio "Estrazione non ancora effettuata" se extraction_done=false
+
+**Miglioramenti UX:**
+- ✅ RulesPanel: Accordion con 3 sezioni (Info/Regole/Istruzioni)
+- ✅ Animazioni pop-in/pop-out per accordion
+- ✅ CountdownBar: Componente sempre visibile in top (fixed)
+- ✅ Countdown rimosso da RulesPanel
+- ✅ Migliore organizzazione contenuti
+
+**Redesign Completo:**
+- ✅ Nuova palette colori professionale (navy + burgundy)
+- ✅ Eliminato clash rosso/verde
+- ✅ Emoji ridotte drasticamente
+- ✅ Design più elegante e professionale
+- ✅ Migliori contrasti e accessibilità
+- ✅ Ombre e transizioni raffinate
+- ✅ Typography pulita
+- ✅ Chips eventi con colori semantici
+
+### [1.1.0] - 22 Nov 2025 - Regole Italiane & Chips
