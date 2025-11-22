@@ -22,12 +22,12 @@
 }
 
 .dialog {
-  background: white;
-  border-radius: 12px;
+  background: var(--bg-primary);
+  border-radius: var(--border-radius-lg);
   padding: 2rem;
   max-width: 500px;
   width: calc(100% - 40px);
-  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.3);
+  box-shadow: var(--shadow-xl);
   animation: slideUp 0.3s ease-out;
 }
 
@@ -45,7 +45,7 @@
 .title {
   font-size: 1.5rem;
   font-weight: bold;
-  color: #c41e3a;
+  color: var(--accent-red);
   margin-bottom: 1rem;
   display: flex;
   align-items: center;
@@ -53,7 +53,7 @@
 }
 
 .message {
-  color: #333;
+  color: var(--text-primary);
   line-height: 1.6;
   margin-bottom: 2rem;
 }
@@ -67,30 +67,30 @@
 .button {
   padding: 0.75rem 1.5rem;
   border: none;
-  border-radius: 6px;
+  border-radius: var(--border-radius-md);
   font-size: 1rem;
   font-weight: 500;
   cursor: pointer;
-  transition: all 0.2s;
+  transition: all var(--transition-normal);
 }
 
 .cancelButton {
-  background: #e0e0e0;
-  color: #333;
+  background: var(--neutral-200);
+  color: var(--text-primary);
 }
 
 .cancelButton:hover {
-  background: #d0d0d0;
+  background: var(--neutral-300);
 }
 
 .confirmButton {
-  background: linear-gradient(135deg, #c41e3a 0%, #8b1429 100%);
+  background: linear-gradient(135deg, var(--accent-red) 0%, var(--accent-red-dark) 100%);
   color: white;
 }
 
 .confirmButton:hover {
   transform: translateY(-2px);
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+  box-shadow: var(--shadow-md);
 }
 
 .confirmButton:active {

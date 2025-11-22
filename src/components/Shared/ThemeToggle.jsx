@@ -14,9 +14,6 @@ const ThemeToggle = () => {
       <span className={styles.icon}>
         {theme === 'light' ? '🌙' : '☀️'}
       </span>
-      <span className={styles.label}>
-        {theme === 'light' ? 'Scuro' : 'Chiaro'}
-      </span>
     </button>
   );
 };

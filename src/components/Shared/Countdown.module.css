@@ -11,23 +11,23 @@
   flex-direction: column;
   align-items: center;
   padding: 1rem;
-  background: linear-gradient(135deg, #c41e3a 0%, #8b1429 100%);
-  border-radius: 12px;
+  background: linear-gradient(135deg, var(--accent-red) 0%, var(--accent-red-dark) 100%);
+  border-radius: var(--border-radius-lg);
   min-width: 80px;
-  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  box-shadow: var(--shadow-md);
 }
 
 .number {
   font-size: 2.5rem;
   font-weight: bold;
-  color: #fff;
+  color: white;
   line-height: 1;
   margin-bottom: 0.5rem;
 }
 
 .label {
   font-size: 0.875rem;
-  color: #ffd700;
+  color: var(--warning);
   text-transform: uppercase;
   letter-spacing: 1px;
 }
@@ -35,9 +35,9 @@
 .expired {
   text-align: center;
   padding: 1.5rem;
-  background: linear-gradient(135deg, #165b33 0%, #0d3d23 100%);
-  border-radius: 12px;
-  color: #fff;
+  background: linear-gradient(135deg, var(--accent-green) 0%, var(--accent-green-dark) 100%);
+  border-radius: var(--border-radius-lg);
+  color: white;
 }
 
 .expiredText {
@@ -48,7 +48,7 @@
 
 .expiredSubtext {
   font-size: 1rem;
-  color: #ffd700;
+  color: var(--warning);
 }
 
 @media (max-width: 768px) {
