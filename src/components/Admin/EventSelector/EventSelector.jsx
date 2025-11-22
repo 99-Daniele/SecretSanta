@@ -56,7 +56,7 @@ const EventSelector = () => {
 
       <div className={styles.container}>
         <div className={styles.header}>
-          <h1 className={styles.title}>🎅 Secret Santa Admin</h1>
+          <h1 className={styles.title}>Secret Santa Admin</h1>
           <p className={styles.subtitle}>Seleziona un evento o creane uno nuovo</p>
         </div>
 
@@ -65,7 +65,7 @@ const EventSelector = () => {
             className={styles.createButton}
             onClick={() => setShowCreator(true)}
           >
-            ➕ Crea Nuovo Evento
+            + Crea Nuovo Evento
           </button>
         </div>
 
@@ -73,7 +73,7 @@ const EventSelector = () => {
           <div className={styles.loading}>Caricamento eventi...</div>
         ) : events.length === 0 ? (
           <div className={styles.empty}>
-            <div className={styles.emptyIcon}>🎄</div>
+            <div className={styles.emptyIcon}>📋</div>
             <div className={styles.emptyText}>
               Nessun evento creato ancora
             </div>
@@ -95,19 +95,19 @@ const EventSelector = () => {
                 
                 <div className={styles.chips}>
                   <span className={`${styles.chip} ${event.is_active ? styles.chipActive : styles.chipInactive}`}>
-                    {event.is_active ? '✓ Attivo' : '○ Archiviato'}
+                    {event.is_active ? 'Attivo' : 'Archiviato'}
                   </span>
                   <span className={`${styles.chip} ${event.extraction_done ? styles.chipExtracted : styles.chipNotExtracted}`}>
-                    {event.extraction_done ? '🎲 Estrazione fatta' : '⏳ Da estrarre'}
+                    {event.extraction_done ? 'Estratto' : 'Da estrarre'}
                   </span>
                 </div>
 
                 <div className={styles.eventMeta}>
                   <div>
-                    📅 Anno: {event.anno}
+                    Anno: {event.anno}
                   </div>
                   <div>
-                    🎯 Apertura: {formatDate(event.data_apertura)}
+                    Apertura: {formatDate(event.data_apertura)}
                   </div>
                 </div>
               </div>

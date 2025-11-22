@@ -1,6 +1,6 @@
 .page {
   min-height: 100vh;
-  background: linear-gradient(135deg, #f5f5f5 0%, #e0e0e0 100%);
+  background: var(--neutral-snow);
   padding: 2rem;
 }
 
@@ -16,12 +16,13 @@
 
 .title {
   font-size: 2.5rem;
-  color: #c41e3a;
+  color: var(--primary-dark);
   margin-bottom: 0.5rem;
+  font-weight: 700;
 }
 
 .subtitle {
-  color: #666;
+  color: var(--neutral-dark);
   font-size: 1.1rem;
 }
 
@@ -31,17 +32,20 @@
   right: 20px;
   padding: 0.75rem 1.5rem;
   background: white;
-  color: #c41e3a;
-  border: 2px solid #c41e3a;
+  color: var(--accent-burgundy);
+  border: 2px solid var(--accent-burgundy);
   border-radius: 8px;
   cursor: pointer;
   font-weight: 600;
-  transition: all 0.2s;
+  transition: all var(--transition-normal);
+  box-shadow: var(--shadow-sm);
 }
 
 .logoutButton:hover {
-  background: #c41e3a;
+  background: var(--accent-burgundy);
   color: white;
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-md);
 }
 
 .actions {
@@ -52,22 +56,23 @@
 
 .createButton {
   padding: 1rem 2rem;
-  background: linear-gradient(135deg, #165b33 0%, #0d3d23 100%);
+  background: linear-gradient(135deg, var(--accent-burgundy) 0%, var(--accent-wine) 100%);
   color: white;
   border: none;
   border-radius: 8px;
   font-size: 1.1rem;
-  font-weight: bold;
+  font-weight: 600;
   cursor: pointer;
   display: flex;
   align-items: center;
   gap: 0.5rem;
-  transition: all 0.2s;
+  transition: all var(--transition-normal);
+  box-shadow: var(--shadow-md);
 }
 
 .createButton:hover {
   transform: translateY(-2px);
-  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.2);
+  box-shadow: var(--shadow-lg);
 }
 
 .eventsList {
@@ -80,14 +85,16 @@
   background: white;
   border-radius: 12px;
   padding: 1.5rem;
-  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  box-shadow: var(--shadow-md);
   cursor: pointer;
-  transition: all 0.2s;
+  transition: all var(--transition-normal);
+  border: 1px solid var(--neutral-light);
 }
 
 .eventCard:hover {
   transform: translateY(-4px);
-  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.15);
+  box-shadow: var(--shadow-lg);
+  border-color: var(--accent-rose);
 }
 
 .eventIcon {
@@ -106,12 +113,13 @@
 .eventCode {
   display: inline-block;
   padding: 0.25rem 0.75rem;
-  background: #f0f0f0;
-  color: #666;
+  background: var(--neutral-light);
+  color: var(--neutral-charcoal);
   border-radius: 4px;
   font-family: monospace;
   font-size: 0.9rem;
   margin-bottom: 1rem;
+  font-weight: 600;
 }
 
 .chips {
@@ -133,27 +141,27 @@
 }
 
 .chipActive {
-  background: #d4edda;
-  color: #155724;
-  border: 2px solid #c3e6cb;
+  background: var(--success-light);
+  color: var(--success);
+  border: 2px solid var(--success);
 }
 
 .chipInactive {
-  background: #f8d7da;
-  color: #721c24;
-  border: 2px solid #f5c6cb;
+  background: var(--error-light);
+  color: var(--error);
+  border: 2px solid var(--error);
 }
 
 .chipExtracted {
-  background: #d1ecf1;
-  color: #0c5460;
-  border: 2px solid #bee5eb;
+  background: var(--info-light);
+  color: var(--info);
+  border: 2px solid var(--info);
 }
 
 .chipNotExtracted {
-  background: #fff3cd;
-  color: #856404;
-  border: 2px solid #ffeaa7;
+  background: var(--warning-light);
+  color: var(--warning);
+  border: 2px solid var(--warning);
 }
 
 .eventMeta {

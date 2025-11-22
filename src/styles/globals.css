@@ -17,15 +17,46 @@ code {
     monospace;
 }
 
-/* Christmas theme colors */
+/* Elegant & Professional Color Palette */
 :root {
-  --christmas-red: #c41e3a;
-  --christmas-dark-red: #8b1429;
-  --christmas-green: #165b33;
-  --christmas-dark-green: #0d3d23;
-  --christmas-gold: #ffd700;
-  --christmas-white: #fff;
-  --christmas-snow: #f5f5f5;
+  /* Primary colors - Elegant navy and burgundy */
+  --primary-dark: #1a2332;
+  --primary-navy: #2c3e50;
+  --primary-blue: #34495e;
+  
+  /* Accent colors - Sophisticated burgundy/wine */
+  --accent-burgundy: #8b4049;
+  --accent-wine: #a85860;
+  --accent-rose: #c9999e;
+  
+  /* Neutral colors */
+  --neutral-white: #ffffff;
+  --neutral-snow: #f8f9fa;
+  --neutral-light: #ecf0f1;
+  --neutral-medium: #bdc3c7;
+  --neutral-dark: #7f8c8d;
+  --neutral-charcoal: #34495e;
+  
+  /* Semantic colors */
+  --success: #27ae60;
+  --success-light: #d4edda;
+  --warning: #f39c12;
+  --warning-light: #fff3cd;
+  --error: #e74c3c;
+  --error-light: #f8d7da;
+  --info: #3498db;
+  --info-light: #d1ecf1;
+  
+  /* Shadows */
+  --shadow-sm: 0 2px 4px rgba(0, 0, 0, 0.1);
+  --shadow-md: 0 4px 6px rgba(0, 0, 0, 0.1);
+  --shadow-lg: 0 10px 25px rgba(0, 0, 0, 0.15);
+  --shadow-xl: 0 20px 40px rgba(0, 0, 0, 0.2);
+  
+  /* Transitions */
+  --transition-fast: 0.15s ease;
+  --transition-normal: 0.3s ease;
+  --transition-slow: 0.5s ease;
 }
 
 /* Smooth scrolling */
@@ -39,16 +70,16 @@ html {
 }
 
 ::-webkit-scrollbar-track {
-  background: #f1f1f1;
+  background: var(--neutral-light);
 }
 
 ::-webkit-scrollbar-thumb {
-  background: var(--christmas-red);
+  background: var(--accent-burgundy);
   border-radius: 5px;
 }
 
 ::-webkit-scrollbar-thumb:hover {
-  background: var(--christmas-dark-red);
+  background: var(--accent-wine);
 }
 
 /* Utility classes */
@@ -106,7 +137,7 @@ button:focus,
 a:focus,
 input:focus,
 textarea:focus {
-  outline: 2px solid var(--christmas-red);
+  outline: 2px solid var(--accent-burgundy);
   outline-offset: 2px;
 }
 
