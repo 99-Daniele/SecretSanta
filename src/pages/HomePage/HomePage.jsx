@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useEvent } from '../../context/EventContext';
+import { supabase } from '../../utils/supabaseClient';
 import ThemeToggle from '../../components/Shared/ThemeToggle';
 import styles from './HomePage.module.css';
 
@@ -31,6 +32,19 @@ const HomePage = () => {
       return;
     }
 
+    const { data: participant, error: participantError } = await supabase
+      .from('participants')
+      .select('*')
+      .eq('event_id', event.id)
+      .eq('access_code', participantCode.toUpperCase())
+      .single();
+
+    if (participantError || !participant) {
+      setError('Codice partecipante non valido');
+      setLoading(false);
+      return;
+    }
+
     navigate(`/participant/${eventCode}/${participantCode.toUpperCase()}`);
     setLoading(false);
   };
@@ -46,6 +60,12 @@ const HomePage = () => {
         </div>
 
         <form onSubmit={handleSubmit} className={styles.form}>
+
+          {error && (
+            <div className={styles.error}>
+              <span>⚠</span> {error}
+            </div>
+          )}
           <div>
             <label className={styles.label}>
               Codice Evento
@@ -70,12 +90,6 @@ const HomePage = () => {
             />
           </div>
 
-          {error && (
-            <div className={styles.error}>
-              <span>⚠</span> {error}
-            </div>
-          )}
-
           <button
             type="submit"
             disabled={loading}
@@ -87,7 +101,7 @@ const HomePage = () => {
 
         <div className={styles.footer}>
           <a href="/admin/login" className={styles.adminLink}>
-            Accesso Admin →
+            Accesso Admin
           </a>
         </div>
       </div>

@@ -1,13 +1,13 @@
-import { useState } from 'react';
-import { useNavigate, Link } from 'react-router-dom';
-import { useAuth } from '../../../context/AuthContext';
-import ThemeToggle from '../../Shared/ThemeToggle';
-import styles from './AdminLogin.module.css';
+import { useState } from "react";
+import { useNavigate, Link } from "react-router-dom";
+import { useAuth } from "../../../context/AuthContext";
+import ThemeToggle from "../../Shared/ThemeToggle";
+import styles from "./AdminLogin.module.css";
 
 const AdminLogin = () => {
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
-  const [error, setError] = useState('');
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
 
   const { signIn } = useAuth();
@@ -15,10 +15,10 @@ const AdminLogin = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    setError('');
+    setError("");
 
     if (!email || !password) {
-      setError('Inserisci email e password');
+      setError("Inserisci email e password");
       return;
     }
 
@@ -28,15 +28,15 @@ const AdminLogin = () => {
       const { data, error: signInError } = await signIn(email, password);
 
       if (signInError) {
-        setError('Credenziali non valide');
+        setError("Credenziali admin non valide");
         return;
       }
 
       if (data) {
-        navigate('/admin/dashboard');
+        navigate("/admin/dashboard");
       }
     } catch {
-      setError('Errore durante il login. Riprova.');
+      setError("Errore durante il login. Riprova.");
     } finally {
       setLoading(false);
     }
@@ -51,6 +51,7 @@ const AdminLogin = () => {
         <p className={styles.subtitle}>Accedi al pannello di gestione</p>
 
         <form onSubmit={handleSubmit} className={styles.form}>
+          {error && <div className={styles.error}>{error}</div>}
           <div className={styles.formGroup}>
             <label htmlFor="email" className={styles.label}>
               Email
@@ -81,18 +82,12 @@ const AdminLogin = () => {
             />
           </div>
 
-          {error && (
-            <div className={styles.error}>
-              ⚠️ {error}
-            </div>
-          )}
-
           <button
             type="submit"
             className={styles.submitButton}
             disabled={loading}
           >
-            {loading ? 'Accesso...' : 'Accedi'}
+            {loading ? "Accesso..." : "Accedi"}
           </button>
         </form>
 
