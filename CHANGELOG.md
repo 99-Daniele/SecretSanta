@@ -1,5 +1,42 @@
 # 📝 Changelog
 
+## [Unreleased]
+
+### ✨ Miglioramenti UI
+
+#### Chips di stato nella selezione eventi
+- **EventSelector**: Aggiunte chips visibili per lo stato dell'evento
+  - **Chip Attivo/Archiviato**: Verde per eventi attivi, rosso per archiviati
+  - **Chip Estrazione**: Blu se già estratto, giallo se ancora da estrarre
+  - Design migliorato con emoji e bordi colorati
+  - Sempre visibile (non più condizionale)
+- **Layout migliorato**: Chips in una sezione dedicata sopra i metadati
+- **Colori distintivi**:
+  - ✓ Attivo: verde (#d4edda)
+  - ○ Archiviato: rosso (#f8d7da)
+  - 🎲 Estrazione fatta: blu (#d1ecf1)
+  - ⏳ Da estrarre: giallo (#fff3cd)
+
+### 📝 Modifiche ai File
+
+1. **src/components/Admin/EventSelector/EventSelector.jsx**
+   - Creata sezione `.chips` dedicata
+   - Chip "Estrazione" sempre visibile (prima solo se estratto)
+   - Testo migliorato con emoji
+   - Rimossi vecchi status dal `.eventMeta`
+
+2. **src/components/Admin/EventSelector/EventSelector.module.css**
+   - Aggiunte classi `.chips`, `.chip`, `.chipActive`, `.chipInactive`, `.chipExtracted`, `.chipNotExtracted`
+   - Rimosse vecchie classi `.status*` non più utilizzate
+   - Aggiunto separatore tra chips e metadati (border-top)
+   - Design più moderno con bordi colorati
+
+### 🎯 Obiettivo
+
+Rendere immediatamente visibile lo stato dell'estrazione nella lista eventi, permettendo all'admin di sapere a colpo d'occhio quali eventi hanno già l'estrazione fatta.
+
+---
+
 ## [1.1.0] - 2025-11-22
 
 ### ✨ Nuove Funzionalità

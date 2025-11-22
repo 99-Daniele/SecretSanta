@@ -92,22 +92,22 @@ const EventSelector = () => {
                 <div className={styles.eventCode}>
                   Codice: {event.event_code}
                 </div>
+                
+                <div className={styles.chips}>
+                  <span className={`${styles.chip} ${event.is_active ? styles.chipActive : styles.chipInactive}`}>
+                    {event.is_active ? '✓ Attivo' : '○ Archiviato'}
+                  </span>
+                  <span className={`${styles.chip} ${event.extraction_done ? styles.chipExtracted : styles.chipNotExtracted}`}>
+                    {event.extraction_done ? '🎲 Estrazione fatta' : '⏳ Da estrarre'}
+                  </span>
+                </div>
+
                 <div className={styles.eventMeta}>
                   <div>
                     📅 Anno: {event.anno}
                   </div>
                   <div>
                     🎯 Apertura: {formatDate(event.data_apertura)}
-                  </div>
-                  <div>
-                    <span className={`${styles.status} ${event.is_active ? styles.statusActive : styles.statusInactive}`}>
-                      {event.is_active ? 'Attivo' : 'Archiviato'}
-                    </span>
-                    {event.extraction_done && (
-                      <span className={`${styles.status} ${styles.statusExtracted}`}>
-                        Estratto
-                      </span>
-                    )}
                   </div>
                 </div>
               </div>
