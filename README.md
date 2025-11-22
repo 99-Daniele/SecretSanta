@@ -32,6 +32,7 @@ This application allows you to:
 - ✅ Protected admin panel with authentication
 - ✅ Multiple events management
 - ✅ Auto-generated codes
+- ✅ **Default rules and instructions in Italian** (fully editable)
 - ✅ CRUD participants with confirmations
 - ✅ Automatic extraction with animations
 - ✅ Toggle show/hide matches

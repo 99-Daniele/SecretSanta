@@ -2,6 +2,31 @@ import { useState, useEffect } from 'react';
 import { useEvent } from '../../../context/EventContext';
 import { generateEventCode } from '../../../utils/codeGenerator';
 
+const DEFAULT_REGOLE = `🎁 REGOLE DEL SECRET SANTA
+
+1. Ogni partecipante dovrà fare un regalo a una persona estratta casualmente
+2. Il budget consigliato è indicato sopra - cerchiamo di rispettarlo!
+3. Il regalo deve essere avvolto in carta natalizia
+4. Non rivelare a nessuno chi hai pescato - mantieni il segreto!
+5. Porta il regalo all'evento indicato nella data di apertura
+6. Divertiti e sii creativo con il tuo regalo! 🎅
+
+📝 NOTE IMPORTANTI:
+- Dopo aver visto il tuo abbinamento, potrai visualizzarlo UNA SOLA VOLTA
+- Se hai bisogno di rivederlo, usa il pulsante "Richiedi Ripristino"
+- Dopo la data di apertura, tutti potranno vedere tutti gli abbinamenti`;
+
+const DEFAULT_NOTE = `🎄 ISTRUZIONI PER I PARTECIPANTI
+
+• Accedi con il codice evento e il tuo codice personale
+• Leggi attentamente il nome della persona a cui farai il regalo
+• Segnatelo subito - potrai vederlo solo una volta!
+• Acquista un regalo pensato e creativo
+• Incartalo con cura
+• Portalo alla festa!
+
+Ci vediamo alla festa! 🎅✨`;
+
 const InfoRulesEditor = () => {
   const { currentEvent, updateEvent } = useEvent();
   const [formData, setFormData] = useState({
@@ -11,8 +36,8 @@ const InfoRulesEditor = () => {
     budget_min: '',
     budget_max: '',
     data_apertura: '',
-    regole_testo: '',
-    note_admin: '',
+    regole_testo: DEFAULT_REGOLE,
+    note_admin: DEFAULT_NOTE,
   });
   const [isSaving, setIsSaving] = useState(false);
   const [message, setMessage] = useState('');
@@ -26,19 +51,23 @@ const InfoRulesEditor = () => {
         budget_min: currentEvent.budget_min || '',
         budget_max: currentEvent.budget_max || '',
         data_apertura: currentEvent.data_apertura ?  new Date(currentEvent.data_apertura).toISOString().slice(0, 16) : '',
-        regole_testo: currentEvent.regole_testo || '',
-        note_admin: currentEvent.note_admin || '',
+        regole_testo: currentEvent.regole_testo || DEFAULT_REGOLE,
+        note_admin: currentEvent.note_admin || DEFAULT_NOTE,
       });
     }
   }, [currentEvent]);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
-    setFormData(prev => ({ ...prev, [name]: value }));
-    
-    if (name === 'nome_evento' && !prev.event_code) {
-      setFormData(prev => ({  ...prev, event_code: generateEventCode(value) }));
-    }
+    setFormData(prev => {
+      const updated = { ...prev, [name]: value };
+      
+      if (name === 'nome_evento' && !updated.event_code) {
+        updated.event_code = generateEventCode(value);
+      }
+      
+      return updated;
+    });
   };
 
   const handleSave = async (e) => {
@@ -145,25 +174,35 @@ const InfoRulesEditor = () => {
         </div>
 
         <div>
-          <label style={{ fontWeight: 600, display: 'block', marginBottom: '0.5rem' }}>Regole</label>
+          <label style={{ fontWeight: 600, display: 'block', marginBottom: '0.5rem' }}>
+            Regole
+          </label>
           <textarea
             name="regole_testo"
             value={formData.regole_testo}
             onChange={handleChange}
-            rows="5"
+            rows="10"
             style={{ width: '100%', padding: '0.75rem', border: '2px solid #e0e0e0', borderRadius: '8px', fontSize: '1rem', fontFamily: 'inherit', resize: 'vertical' }}
           />
+          <small style={{ color: '#666', fontSize: '0.85rem' }}>
+            Puoi modificare liberamente il testo delle regole
+          </small>
         </div>
 
         <div>
-          <label style={{ fontWeight: 600, display: 'block', marginBottom: '0.5rem' }}>Note / Istruzioni</label>
+          <label style={{ fontWeight: 600, display: 'block', marginBottom: '0.5rem' }}>
+            Note / Istruzioni
+          </label>
           <textarea
             name="note_admin"
             value={formData.note_admin}
             onChange={handleChange}
-            rows="5"
+            rows="8"
             style={{ width: '100%', padding: '0.75rem', border: '2px solid #e0e0e0', borderRadius: '8px', fontSize: '1rem', fontFamily: 'inherit', resize: 'vertical' }}
           />
+          <small style={{ color: '#666', fontSize: '0.85rem' }}>
+            Puoi personalizzare le istruzioni per i partecipanti
+          </small>
         </div>
 
         {message && (

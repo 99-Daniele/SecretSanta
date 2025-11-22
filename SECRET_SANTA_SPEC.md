@@ -32,9 +32,41 @@ Applicazione React per gestire un Secret Santa tra amici.
 - [x] Budget suggerito (modificabile da admin)
 - [x] **Countdown** data apertura regali (modificabile da admin)
 - [x] **Note/Istruzioni** personalizzabili da admin (es. "portare regalo incartato")
+- [x] **Regole/Info di default** in italiano (sempre presenti come esempio/guida)
 - [x] Editor admin per modificare regole e note
 - [ ] Esclusioni/Restrizioni (es. coppie che non possono pescarsi) - feature futura
 - [ ] Tema o categorie regalo (opzionale) - feature futura
+
+**Testo Regole Default (in italiano):**
+```
+🎁 REGOLE DEL SECRET SANTA
+
+1. Ogni partecipante dovrà fare un regalo a una persona estratta casualmente
+2. Il budget consigliato è indicato sopra - cerchiamo di rispettarlo!
+3. Il regalo deve essere avvolto in carta natalizia
+4. Non rivelare a nessuno chi hai pescato - mantieni il segreto!
+5. Porta il regalo all'evento indicato nella data di apertura
+6. Divertiti e sii creativo con il tuo regalo! 🎅
+
+📝 NOTE IMPORTANTI:
+- Dopo aver visto il tuo abbinamento, potrai visualizzarlo UNA SOLA VOLTA
+- Se hai bisogno di rivederlo, usa il pulsante "Richiedi Ripristino"
+- Dopo la data di apertura, tutti potranno vedere tutti gli abbinamenti
+```
+
+**Testo Note Default (in italiano):**
+```
+🎄 ISTRUZIONI PER I PARTECIPANTI
+
+• Accedi con il codice evento e il tuo codice personale
+• Leggi attentamente il nome della persona a cui farai il regalo
+• Segnatelo subito - potrai vederlo solo una volta!
+• Acquista un regalo pensato e creativo
+• Incartalo con cura
+• Portalo alla festa!
+
+Ci vediamo alla festa! 🎅✨
+```
 
 ### 3. Estrazione (Solo Admin)
 - [x] **Pulsante estrazione** nel pannello admin

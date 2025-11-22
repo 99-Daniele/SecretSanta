@@ -3,6 +3,31 @@ import { useEvent } from '../../../context/EventContext';
 import { generateEventCode } from '../../../utils/codeGenerator';
 import styles from './EventCreator.module.css';
 
+const DEFAULT_REGOLE = `🎁 REGOLE DEL SECRET SANTA
+
+1. Ogni partecipante dovrà fare un regalo a una persona estratta casualmente
+2. Il budget consigliato è indicato sopra - cerchiamo di rispettarlo!
+3. Il regalo deve essere avvolto in carta natalizia
+4. Non rivelare a nessuno chi hai pescato - mantieni il segreto!
+5. Porta il regalo all'evento indicato nella data di apertura
+6. Divertiti e sii creativo con il tuo regalo! 🎅
+
+📝 NOTE IMPORTANTI:
+- Dopo aver visto il tuo abbinamento, potrai visualizzarlo UNA SOLA VOLTA
+- Se hai bisogno di rivederlo, usa il pulsante "Richiedi Ripristino"
+- Dopo la data di apertura, tutti potranno vedere tutti gli abbinamenti`;
+
+const DEFAULT_NOTE = `🎄 ISTRUZIONI PER I PARTECIPANTI
+
+• Accedi con il codice evento e il tuo codice personale
+• Leggi attentamente il nome della persona a cui farai il regalo
+• Segnatelo subito - potrai vederlo solo una volta!
+• Acquista un regalo pensato e creativo
+• Incartalo con cura
+• Portalo alla festa!
+
+Ci vediamo alla festa! 🎅✨`;
+
 const EventCreator = ({ onEventCreated, onCancel }) => {
   const [formData, setFormData] = useState({
     nome_evento: '',
@@ -10,8 +35,8 @@ const EventCreator = ({ onEventCreated, onCancel }) => {
     budget_min: '',
     budget_max: '',
     data_apertura: '',
-    regole_testo: '',
-    note_admin: '',
+    regole_testo: DEFAULT_REGOLE,
+    note_admin: DEFAULT_NOTE,
   });
   const [generatedCode, setGeneratedCode] = useState('');
   const [error, setError] = useState('');
@@ -199,8 +224,11 @@ const EventCreator = ({ onEventCreated, onCancel }) => {
               className={styles.textarea}
               value={formData.regole_testo}
               onChange={handleChange}
-              placeholder="Es: I regali devono essere incartati..."
+              rows="10"
             />
+            <div className={styles.help}>
+              Testo predefinito in italiano - puoi modificarlo liberamente
+            </div>
           </div>
 
           <div className={styles.formGroup}>
@@ -213,8 +241,11 @@ const EventCreator = ({ onEventCreated, onCancel }) => {
               className={styles.textarea}
               value={formData.note_admin}
               onChange={handleChange}
-              placeholder="Es: Portare il regalo alla cena del 24 dicembre..."
+              rows="8"
             />
+            <div className={styles.help}>
+              Istruzioni predefinite in italiano - puoi personalizzarle
+            </div>
           </div>
 
           {error && (
