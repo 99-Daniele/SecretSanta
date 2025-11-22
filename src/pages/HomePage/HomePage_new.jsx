@@ -1,7 +1,6 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useEvent } from '../../context/EventContext';
-import ThemeToggle from '../../components/Shared/ThemeToggle';
 
 const HomePage = () => {
   const [eventCode, setEventCode] = useState('');
@@ -36,8 +35,7 @@ const HomePage = () => {
 
   return (
     <div style={{ minHeight: '100vh', background: 'var(--bg-secondary)', display: 'flex', alignItems: 'center', justifyContent: 'center', padding: '1.5rem' }}>
-      <ThemeToggle />
-      <div style={{ background: 'var(--bg-primary)', borderRadius: 'var(--border-radius-xl)', padding: '2.5rem', maxWidth: '480px', width: '100%', boxShadow: 'var(--shadow-lg)', border: '1px solid var(--border-color)' }}>
+      <div style={{ background: 'white', borderRadius: 'var(--border-radius-xl)', padding: '2.5rem', maxWidth: '480px', width: '100%', boxShadow: 'var(--shadow-lg)', border: '1px solid var(--border-color)' }}>
         <div style={{ textAlign: 'center', marginBottom: '2rem' }}>
           <div style={{ width: '72px', height: '72px', background: 'linear-gradient(135deg, var(--accent-red) 0%, var(--accent-red-dark) 100%)', borderRadius: '50%', display: 'flex', alignItems: 'center', justifyContent: 'center', margin: '0 auto 1.5rem', fontSize: '2rem', boxShadow: 'var(--shadow-md)' }}>🎁</div>
           <h1 style={{ fontSize: '2rem', color: 'var(--text-primary)', marginBottom: '0.5rem', fontWeight: 700 }}>Secret Santa</h1>

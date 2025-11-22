@@ -1,6 +1,7 @@
 import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
 import { AuthProvider } from './context/AuthContext';
 import { EventProvider } from './context/EventContext';
+import { ThemeProvider } from './context/ThemeContext';
 import ProtectedRoute from './components/ProtectedRoute';
 
 // Pages
@@ -17,9 +18,10 @@ import './styles/globals.css';
 
 function App() {
   return (
-    <AuthProvider>
-      <EventProvider>
-        <Router>
+    <ThemeProvider>
+      <AuthProvider>
+        <EventProvider>
+          <Router>
           <Routes>
             {/* Public Routes */}
             <Route path="/" element={<HomePage />} />
@@ -57,6 +59,7 @@ function App() {
         </Router>
       </EventProvider>
     </AuthProvider>
+    </ThemeProvider>
   );
 }
 

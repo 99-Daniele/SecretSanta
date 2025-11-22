@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 import { useAuth } from '../../../context/AuthContext';
-import Snowflakes from '../../Shared/Snowflakes';
+import ThemeToggle from '../../Shared/ThemeToggle';
 import styles from './AdminLogin.module.css';
 
 const AdminLogin = () => {
@@ -44,8 +44,7 @@ const AdminLogin = () => {
 
   return (
     <div className={styles.loginPage}>
-      <Snowflakes count={50} />
-      
+      <ThemeToggle />
       <div className={styles.loginCard}>
         <div className={styles.logo}>🎅</div>
         <h1 className={styles.title}>Admin Login</h1>

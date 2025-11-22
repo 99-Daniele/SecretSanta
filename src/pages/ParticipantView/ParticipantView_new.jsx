@@ -4,7 +4,8 @@ import { supabase } from '../../utils/supabaseClient';
 import { decrypt } from '../../utils/encryption';
 import { useEventStatus } from '../../hooks/useEventStatus';
 import { sendResetRequestEmail } from '../../utils/emailService';
-import TopBar from '../../components/Shared/TopBar';
+import RulesPanel from '../../components/Shared/RulesPanel';
+import CountdownBar from '../../components/Shared/CountdownBar';
 
 const ParticipantView = () => {
   const { eventCode, participantCode } = useParams();
@@ -112,29 +113,13 @@ const ParticipantView = () => {
   };
 
   if (loading) {
-    return (
-      <div style={{ minHeight: '100vh', background: 'var(--bg-secondary)', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '1.25rem', color: 'var(--text-secondary)', paddingTop: '80px' }}>
-        <TopBar 
-          eventName={event?.nome_evento || 'Secret Santa'} 
-          targetDate={event?.data_apertura} 
-          event={event}
-          participant={participant}
-        />
-        Caricamento...
-      </div>
-    );
+    return <div style={{ minHeight: '100vh', background: 'var(--bg-secondary)', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '1.25rem', color: 'var(--text-secondary)' }}>Caricamento...</div>;
   }
 
   if (error) {
     return (
-      <div style={{ minHeight: '100vh', background: 'var(--bg-secondary)', display: 'flex', alignItems: 'center', justifyContent: 'center', padding: '1.5rem', paddingTop: '100px' }}>
-        <TopBar 
-          eventName={event?.nome_evento || 'Secret Santa'} 
-          targetDate={event?.data_apertura} 
-          event={event}
-          participant={participant}
-        />
-        <div style={{ background: 'var(--bg-primary)', borderRadius: 'var(--border-radius-xl)', padding: '2.5rem', textAlign: 'center', maxWidth: '480px', boxShadow: 'var(--shadow-lg)', border: '1px solid var(--border-color)' }}>
+      <div style={{ minHeight: '100vh', background: 'var(--bg-secondary)', display: 'flex', alignItems: 'center', justifyContent: 'center', padding: '1.5rem' }}>
+        <div style={{ background: 'white', borderRadius: 'var(--border-radius-xl)', padding: '2.5rem', textAlign: 'center', maxWidth: '480px', boxShadow: 'var(--shadow-lg)', border: '1px solid var(--border-color)' }}>
           <div style={{ fontSize: '4rem', marginBottom: '1rem' }}>⚠️</div>
           <h1 style={{ color: 'var(--error)', marginBottom: '1rem', fontSize: '1.75rem' }}>Errore</h1>
           <p style={{ fontSize: '1.1rem', color: 'var(--text-secondary)', marginBottom: '1.5rem' }}>{error}</p>
@@ -149,16 +134,11 @@ const ParticipantView = () => {
   // DOPO DATA APERTURA
   if (isEventOpen) {
     return (
-      <div style={{ minHeight: '100vh', background: 'var(--bg-secondary)', padding: '1.5rem', paddingTop: '80px' }}>
-        <TopBar 
-          eventName={event.nome_evento} 
-          targetDate={event.data_apertura} 
-          event={event}
-          participant={participant}
-        />
+      <div style={{ minHeight: '100vh', background: 'var(--bg-secondary)', padding: '1.5rem' }}>
+        <RulesPanel event={event} />
         
         <div style={{ maxWidth: '800px', margin: '0 auto' }}>
-          <div style={{ background: 'var(--bg-primary)', borderRadius: 'var(--border-radius-xl)', padding: '2.5rem', boxShadow: 'var(--shadow-lg)', border: '1px solid var(--border-color)' }}>
+          <div style={{ background: 'white', borderRadius: 'var(--border-radius-xl)', padding: '2.5rem', boxShadow: 'var(--shadow-lg)', border: '1px solid var(--border-color)' }}>
             <div style={{ textAlign: 'center', marginBottom: '2rem' }}>
               <div style={{ width: '80px', height: '80px', background: 'linear-gradient(135deg, var(--accent-green) 0%, var(--accent-green-dark) 100%)', borderRadius: '50%', display: 'flex', alignItems: 'center', justifyContent: 'center', margin: '0 auto 1.5rem', fontSize: '2.5rem', boxShadow: 'var(--shadow-md)' }}>🎄</div>
               <h1 style={{ fontSize: '1.75rem', color: 'var(--accent-green)', marginBottom: '0.5rem' }}>Il Secret Santa è concluso!</h1>
@@ -167,7 +147,7 @@ const ParticipantView = () => {
 
             <div style={{ background: 'var(--bg-secondary)', borderRadius: 'var(--border-radius-lg)', padding: '1.5rem' }}>
               {allAssignments.map((a, i) => (
-                <div key={i} style={{ padding: '1rem', background: 'var(--bg-primary)', borderRadius: 'var(--border-radius-md)', marginBottom: '0.75rem', display: 'flex', alignItems: 'center', gap: '1rem', border: '1px solid var(--border-color)' }}>
+                <div key={i} style={{ padding: '1rem', background: 'white', borderRadius: 'var(--border-radius-md)', marginBottom: '0.75rem', display: 'flex', alignItems: 'center', gap: '1rem', border: '1px solid var(--border-color)' }}>
                   <div style={{ flex: 1, fontWeight: 600, color: 'var(--text-primary)' }}>{a.giver}</div>
                   <div style={{ fontSize: '1.5rem', color: 'var(--accent-red)' }}>→</div>
                   <div style={{ flex: 1, fontWeight: 600, color: 'var(--accent-red)' }}>{a.receiver}</div>
@@ -183,15 +163,10 @@ const ParticipantView = () => {
   // ESTRAZIONE NON ANCORA EFFETTUATA
   if (!event.extraction_done) {
     return (
-      <div style={{ minHeight: '100vh', background: 'var(--bg-secondary)', display: 'flex', alignItems: 'center', justifyContent: 'center', padding: '1.5rem', paddingTop: '80px' }}>
-        <TopBar 
-          eventName={event.nome_evento} 
-          targetDate={event.data_apertura} 
-          event={event}
-          participant={participant}
-        />
+      <div style={{ minHeight: '100vh', background: 'var(--bg-secondary)', display: 'flex', alignItems: 'center', justifyContent: 'center', padding: '1.5rem' }}>
+        <RulesPanel event={event} />
         
-        <div style={{ background: 'var(--bg-primary)', borderRadius: 'var(--border-radius-xl)', padding: '2.5rem', maxWidth: '580px', boxShadow: 'var(--shadow-lg)', border: '1px solid var(--border-color)', textAlign: 'center' }}>
+        <div style={{ background: 'white', borderRadius: 'var(--border-radius-xl)', padding: '2.5rem', maxWidth: '580px', boxShadow: 'var(--shadow-lg)', border: '1px solid var(--border-color)', textAlign: 'center' }}>
           <div style={{ fontSize: '4rem', marginBottom: '1rem' }}>⏳</div>
           <h1 style={{ color: 'var(--accent-red)', fontSize: '1.75rem', marginBottom: '1rem' }}>Estrazione non ancora effettuata</h1>
           <p style={{ fontSize: '1.05rem', color: 'var(--text-secondary)', marginBottom: '1.75rem', lineHeight: '1.6' }}>
@@ -210,15 +185,10 @@ const ParticipantView = () => {
   if (!participant.has_viewed && !revealed) {
     if (showWarning) {
       return (
-        <div style={{ minHeight: '100vh', background: 'var(--bg-secondary)', display: 'flex', alignItems: 'center', justifyContent: 'center', padding: '1.5rem', paddingTop: '80px' }}>
-          <TopBar 
-            eventName={event.nome_evento} 
-            targetDate={event.data_apertura} 
-            event={event}
-            participant={participant}
-          />
+        <div style={{ minHeight: '100vh', background: 'var(--bg-secondary)', display: 'flex', alignItems: 'center', justifyContent: 'center', padding: '1.5rem' }}>
+          <RulesPanel event={event} />
           
-          <div style={{ background: 'var(--bg-primary)', borderRadius: 'var(--border-radius-xl)', padding: '2.5rem', maxWidth: '580px', boxShadow: 'var(--shadow-lg)', border: '1px solid var(--border-color)' }}>
+          <div style={{ background: 'white', borderRadius: 'var(--border-radius-xl)', padding: '2.5rem', maxWidth: '580px', boxShadow: 'var(--shadow-lg)', border: '1px solid var(--border-color)' }}>
             <div style={{ textAlign: 'center', marginBottom: '2rem' }}>
               <div style={{ fontSize: '4rem', marginBottom: '1rem' }}>⚠️</div>
               <h1 style={{ color: 'var(--accent-red)', fontSize: '1.75rem', marginBottom: '1rem' }}>Attenzione!</h1>
@@ -243,15 +213,10 @@ const ParticipantView = () => {
 
     // REVEAL - Mostra il nome
     return (
-      <div style={{ minHeight: '100vh', background: 'var(--bg-secondary)', display: 'flex', alignItems: 'center', justifyContent: 'center', padding: '1.5rem', paddingTop: '80px' }}>
-        <TopBar 
-          eventName={event.nome_evento} 
-          targetDate={event.data_apertura} 
-          event={event}
-          participant={participant}
-        />
+      <div style={{ minHeight: '100vh', background: 'var(--bg-secondary)', display: 'flex', alignItems: 'center', justifyContent: 'center', padding: '1.5rem' }}>
+        <RulesPanel event={event} />
         
-        <div style={{ background: 'var(--bg-primary)', borderRadius: 'var(--border-radius-xl)', padding: '3rem', maxWidth: '680px', boxShadow: 'var(--shadow-lg)', border: '1px solid var(--border-color)', textAlign: 'center' }}>
+        <div style={{ background: 'white', borderRadius: 'var(--border-radius-xl)', padding: '3rem', maxWidth: '680px', boxShadow: 'var(--shadow-lg)', border: '1px solid var(--border-color)', textAlign: 'center' }}>
           <div style={{ fontSize: '5rem', marginBottom: '1.5rem' }}>🎁</div>
           
           <h1 style={{ fontSize: '1.35rem', color: 'var(--text-secondary)', marginBottom: '1.25rem', fontWeight: 400 }}>
@@ -282,15 +247,10 @@ const ParticipantView = () => {
 
   // PRIMA DATA APERTURA - HA GIÀ VISTO (o ha premuto "Ho capito")
   return (
-    <div style={{ minHeight: '100vh', background: 'var(--bg-secondary)', display: 'flex', alignItems: 'center', justifyContent: 'center', padding: '1.5rem', paddingTop: '80px' }}>
-      <TopBar 
-        eventName={event.nome_evento} 
-        targetDate={event.data_apertura} 
-        event={event}
-        participant={participant}
-      />
+    <div style={{ minHeight: '100vh', background: 'var(--bg-secondary)', display: 'flex', alignItems: 'center', justifyContent: 'center', padding: '1.5rem' }}>
+      <RulesPanel event={event} />
       
-      <div style={{ background: 'var(--bg-primary)', borderRadius: 'var(--border-radius-xl)', padding: '2.5rem', maxWidth: '580px', boxShadow: 'var(--shadow-lg)', border: '1px solid var(--border-color)', textAlign: 'center' }}>
+      <div style={{ background: 'white', borderRadius: 'var(--border-radius-xl)', padding: '2.5rem', maxWidth: '580px', boxShadow: 'var(--shadow-lg)', border: '1px solid var(--border-color)', textAlign: 'center' }}>
         <div style={{ fontSize: '4rem', marginBottom: '1rem' }}>🔒</div>
         <h1 style={{ color: 'var(--accent-red)', fontSize: '1.75rem', marginBottom: '1rem' }}>Hai già visualizzato</h1>
         <p style={{ fontSize: '1.05rem', color: 'var(--text-secondary)', marginBottom: '1.75rem', lineHeight: '1.6' }}>

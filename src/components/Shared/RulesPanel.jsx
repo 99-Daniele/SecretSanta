@@ -1,9 +1,13 @@
 import { useState } from 'react';
 import styles from './RulesPanel.module.css';
 
-const RulesPanel = ({ event, loading = false }) => {
-  const [isOpen, setIsOpen] = useState(false);
+const RulesPanel = ({ event, loading = false, isOpen: controlledIsOpen, onClose: controlledOnClose }) => {
+  // Se viene passato isOpen, usa controlled mode, altrimenti uncontrolled mode
+  const [internalIsOpen, setInternalIsOpen] = useState(false);
   const [activeSection, setActiveSection] = useState(null); // 'info', 'regole', 'istruzioni'
+
+  const isControlled = controlledIsOpen !== undefined;
+  const isOpen = isControlled ? controlledIsOpen : internalIsOpen;
 
   if (!event && !loading) {
     return null;
@@ -13,12 +17,29 @@ const RulesPanel = ({ event, loading = false }) => {
     setActiveSection(activeSection === section ? null : section);
   };
 
+  const handleClose = () => {
+    setActiveSection(null);
+    if (isControlled) {
+      controlledOnClose?.();
+    } else {
+      setInternalIsOpen(false);
+    }
+  };
+
+  const handleOpen = () => {
+    if (isControlled) {
+      // In controlled mode, non fare nulla - il parent deve gestire l'apertura
+      return;
+    }
+    setInternalIsOpen(true);
+  };
+
   if (!isOpen) {
     return (
       <div className={styles.rulesPanel}>
         <button
           className={styles.collapsedButton}
-          onClick={() => setIsOpen(true)}
+          onClick={handleOpen}
         >
           Info & Regole
         </button>
@@ -35,7 +56,7 @@ const RulesPanel = ({ event, loading = false }) => {
           </h2>
           <button
             className={styles.closeButton}
-            onClick={() => setIsOpen(false)}
+            onClick={handleClose}
             aria-label="Chiudi"
           >
             ×

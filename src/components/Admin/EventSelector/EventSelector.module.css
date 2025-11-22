@@ -1,6 +1,6 @@
 .page {
   min-height: 100vh;
-  background: var(--neutral-snow);
+  background: var(--bg-secondary);
   padding: 2rem;
 }
 
@@ -16,13 +16,13 @@
 
 .title {
   font-size: 2.5rem;
-  color: var(--primary-dark);
+  color: var(--text-primary);
   margin-bottom: 0.5rem;
   font-weight: 700;
 }
 
 .subtitle {
-  color: var(--neutral-dark);
+  color: var(--text-secondary);
   font-size: 1.1rem;
 }
 
@@ -32,9 +32,9 @@
   right: 20px;
   padding: 0.75rem 1.5rem;
   background: white;
-  color: var(--accent-burgundy);
-  border: 2px solid var(--accent-burgundy);
-  border-radius: 8px;
+  color: var(--accent-red);
+  border: 2px solid var(--accent-red);
+  border-radius: var(--border-radius-md);
   cursor: pointer;
   font-weight: 600;
   transition: all var(--transition-normal);
@@ -42,7 +42,7 @@
 }
 
 .logoutButton:hover {
-  background: var(--accent-burgundy);
+  background: var(--accent-red);
   color: white;
   transform: translateY(-2px);
   box-shadow: var(--shadow-md);
@@ -56,10 +56,10 @@
 
 .createButton {
   padding: 1rem 2rem;
-  background: linear-gradient(135deg, var(--accent-burgundy) 0%, var(--accent-wine) 100%);
+  background: linear-gradient(135deg, var(--accent-green) 0%, var(--accent-green-dark) 100%);
   color: white;
   border: none;
-  border-radius: 8px;
+  border-radius: var(--border-radius-md);
   font-size: 1.1rem;
   font-weight: 600;
   cursor: pointer;
@@ -83,18 +83,18 @@
 
 .eventCard {
   background: white;
-  border-radius: 12px;
+  border-radius: var(--border-radius-lg);
   padding: 1.5rem;
   box-shadow: var(--shadow-md);
   cursor: pointer;
   transition: all var(--transition-normal);
-  border: 1px solid var(--neutral-light);
+  border: 1px solid var(--border-color);
 }
 
 .eventCard:hover {
   transform: translateY(-4px);
   box-shadow: var(--shadow-lg);
-  border-color: var(--accent-rose);
+  border-color: var(--accent-red);
 }
 
 .eventIcon {
@@ -106,20 +106,21 @@
 .eventName {
   font-size: 1.5rem;
   font-weight: bold;
-  color: #333;
+  color: var(--text-primary);
   margin-bottom: 0.5rem;
 }
 
 .eventCode {
   display: inline-block;
   padding: 0.25rem 0.75rem;
-  background: var(--neutral-light);
-  color: var(--neutral-charcoal);
-  border-radius: 4px;
+  background: var(--bg-secondary);
+  color: var(--text-primary);
+  border-radius: var(--border-radius-sm);
   font-family: monospace;
   font-size: 0.9rem;
   margin-bottom: 1rem;
   font-weight: 600;
+  border: 1px solid var(--border-color);
 }
 
 .chips {
@@ -168,10 +169,10 @@
   display: flex;
   flex-direction: column;
   gap: 0.5rem;
-  color: #666;
+  color: var(--text-secondary);
   font-size: 0.9rem;
   padding-top: 0.5rem;
-  border-top: 1px solid #e0e0e0;
+  border-top: 1px solid var(--border-color);
 }
 
 .eventMeta div {
@@ -183,7 +184,7 @@
 .loading {
   text-align: center;
   padding: 3rem;
-  color: #666;
+  color: var(--text-secondary);
   font-size: 1.2rem;
 }
 
@@ -198,7 +199,7 @@
 }
 
 .emptyText {
-  color: #666;
+  color: var(--text-secondary);
   font-size: 1.2rem;
   margin-bottom: 1rem;
 }

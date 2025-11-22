@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../../../context/AuthContext';
 import { useEvent } from '../../../context/EventContext';
 import EventCreator from '../EventCreator/EventCreator';
+import ThemeToggle from '../../Shared/ThemeToggle';
 import styles from './EventSelector.module.css';
 
 const EventSelector = () => {
@@ -50,6 +51,7 @@ const EventSelector = () => {
 
   return (
     <div className={styles.page}>
+      <ThemeToggle />
       <button className={styles.logoutButton} onClick={handleLogout}>
         Logout
       </button>

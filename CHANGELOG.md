@@ -1,5 +1,159 @@
 # 📝 Changelog
 
+## [1.4.0] - 2025-11-23
+
+### 🎨 Redesign Tema Pulito + TopBar Professionale
+
+#### Nuovo Design Minimalista
+**Da** (Elegant Navy/Burgundy):
+- Background navy scuri con gradienti
+- Colori dominanti navy + burgundy su tutta l'interfaccia
+- Feedback: "troppo colorato lo sfondo così come la neve"
+
+**A** (Clean White/Red-Green):
+- **Background bianco/chiaro**: Design pulito e professionale
+- **Rosso e verde come accenti**: Solo per elementi importanti
+- **Palette neutra**: Grigi eleganti per testi e bordi
+- **Dark mode**: Tema scuro con palette invertita
+
+#### TopBar Component Unificato
+**Prima**: 3 componenti separati sparsi nelle view
+- ThemeToggle (top-left corner)
+- CountdownBar (barra rossa separata)
+- RulesPanel (bottone floating)
+
+**Ora**: Singolo TopBar professionale con 3 sezioni
+- **Sinistra**: Nome evento + Theme toggle (sole/luna)
+- **Centro**: Countdown in tempo reale (integrato)
+- **Destra**: Info button (bianco con bordo rosso) + User menu
+
+#### User Menu Component
+- **Avatar circolare**: Iniziali utente su sfondo rosso gradient
+- **Dropdown animato**: Nome completo, email, logout
+- **Click outside**: Chiude automaticamente
+- **Responsive**: Si adatta su mobile
+
+#### Dark Mode System
+- **ThemeContext**: Gestione tema globale con localStorage
+- **CSS Variables**: Completa dual-theme con `[data-theme="dark"]`
+- **Toggle button**: Sole/luna nel TopBar
+- **Persistenza**: Tema salvato tra sessioni
+
+#### Mobile Optimization
+- **Tap targets**: Minimo 44px per tutti i pulsanti touch
+- **TopBar responsive**: 3 righe su mobile (left, right, center-full-width)
+- **Flexbox**: Layout adattivo con `flex-wrap`
+
+### 🚀 Componenti Aggiornati
+
+#### Nuovi Componenti
+1. **TopBar.jsx + .module.css**
+   - Unifica ThemeToggle + CountdownBar + RulesPanel
+   - 3 sezioni: left (event+theme), center (countdown), right (info+user)
+   - User avatar con iniziali e dropdown menu
+   - Info button bianco con bordo/testo rosso
+   - Mobile responsive con flex-wrap
+
+2. **ThemeContext.jsx**
+   - Context per theme management
+   - localStorage persistence
+   - Sets `data-theme` attribute su documentElement
+
+3. **ThemeToggle.jsx + .module.css**
+   - Bottone sole/luna per switch tema
+   - Ora integrato in TopBar (standalone deprecato)
+
+#### Componenti Modificati
+1. **CountdownBar.jsx + .module.css**
+   - Aggiunto prop `showEventName` (default: true)
+   - Modalità inline per TopBar (`showEventName={false}`)
+   - Nuovi stili `.countdownInline` con CSS variables
+
+2. **RulesPanel.jsx + .module.css**
+   - Supporto controlled/uncontrolled mode
+   - Props: `isOpen`, `onClose` per controllo esterno
+   - Backward compatible (funziona standalone)
+
+3. **ParticipantView.jsx**
+   - Sostituiti ThemeToggle + CountdownBar + RulesPanel con TopBar
+   - Tutte le 6 view aggiornate (loading, error, open, extraction, warning, reveal, already viewed)
+   - Aggiunto `paddingTop: '80px'` per TopBar fixed
+
+4. **globals.css**
+   - **Completa riscrittura CSS variables**:
+     * Light theme: white background + red/green accents
+     * Dark theme: `[data-theme="dark"]` con palette invertita
+   - Nuove variabili:
+     * `--bg-primary, --bg-secondary, --bg-tertiary`
+     * `--text-primary, --text-secondary, --text-tertiary`
+     * `--accent-red, --accent-green` (+ dark variants)
+     * `--neutral-50` fino a `--neutral-900`
+   - Mobile: min tap target 44px
+
+5. **HomePage, AdminLogin, EventSelector**
+   - Aggiunto ThemeToggle standalone (temporaneo)
+   - Aggiornati a nuova palette CSS variables
+   - Background cambiati da gradient a bianco
+
+6. **Snowflakes Component**
+   - **RIMOSSO** da tutti i file (HomePage, ParticipantView, AdminLogin)
+   - Feedback: "troppo colorato lo sfondo così come la neve"
+
+7. **App.jsx**
+   - Wrapped tutto in `<ThemeProvider>`
+   - Abilita theme switching globale
+
+### 📝 Modifiche ai File
+
+**Nuovi:**
+- `src/components/Shared/TopBar.jsx`
+- `src/components/Shared/TopBar.module.css`
+- `src/context/ThemeContext.jsx`
+- `src/components/Shared/ThemeToggle.jsx`
+- `src/components/Shared/ThemeToggle.module.css`
+
+**Modificati:**
+- `src/styles/globals.css` - Completa riscrittura palette
+- `src/components/Shared/CountdownBar.jsx` - Prop `showEventName`
+- `src/components/Shared/CountdownBar.module.css` - Stili inline mode
+- `src/components/Shared/RulesPanel.jsx` - Controlled mode
+- `src/pages/ParticipantView/ParticipantView.jsx` - Integrato TopBar
+- `src/pages/HomePage/HomePage.jsx` - ThemeToggle + nuovi colori
+- `src/components/Admin/AdminLogin/AdminLogin.jsx` - ThemeToggle + nuovi colori
+- `src/components/Admin/EventSelector/EventSelector.jsx` - ThemeToggle + nuovi colori
+- `src/components/Admin/EventSelector/EventSelector.module.css` - Nuova palette
+- `src/components/Shared/RulesPanel.module.css` - Colori rosso invece di navy
+- `src/App.jsx` - ThemeProvider wrapper
+
+**Rimossi:**
+- Tutte le istanze di Snowflakes (5 file)
+
+### 🎯 Impatto
+
+**Performance:**
+- Componenti unificati → meno re-render
+- CSS variables → theming efficiente
+- Snowflakes rimossi → bundle più leggero
+
+**Accessibilità:**
+- Dark mode per riduzione affaticamento occhi
+- Contrasti migliorati (WCAG AA)
+- Tap targets mobile ottimali (44px+)
+
+**UX:**
+- TopBar professionale e organizzato
+- User menu intuitivo con avatar
+- Countdown sempre visibile
+- Theme switching immediato
+- Design pulito e moderno
+
+**Mobile:**
+- TopBar responsive con 3 righe
+- Tap targets ottimizzati
+- Layout adattivo
+
+---
+
 ## [1.2.0] - 2025-11-22
 
 ### 🐛 Bug Fixes Critici

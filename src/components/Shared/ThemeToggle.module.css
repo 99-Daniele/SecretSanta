@@ -1,0 +1,50 @@
+.themeToggle {
+  position: fixed;
+  top: 20px;
+  left: 20px;
+  z-index: 1000;
+  background: white;
+  border: 2px solid var(--border-color);
+  border-radius: var(--border-radius-md);
+  padding: 10px 16px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  cursor: pointer;
+  font-weight: 600;
+  font-size: 0.95rem;
+  color: var(--text-primary);
+  box-shadow: var(--shadow-md);
+  transition: all var(--transition-normal);
+}
+
+.themeToggle:hover {
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-lg);
+  border-color: var(--accent-red);
+}
+
+.icon {
+  font-size: 1.25rem;
+  line-height: 1;
+}
+
+.label {
+  font-size: 0.9rem;
+}
+
+@media (max-width: 768px) {
+  .themeToggle {
+    top: 10px;
+    left: 10px;
+    padding: 8px 12px;
+  }
+
+  .label {
+    display: none;
+  }
+
+  .icon {
+    font-size: 1.5rem;
+  }
+}
