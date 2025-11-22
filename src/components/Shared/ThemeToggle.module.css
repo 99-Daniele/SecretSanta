@@ -5,8 +5,8 @@
   z-index: 1000;
   background-color: var(--neutral-800);
   border: 2px solid var(--border-color);
-  border-radius: var(--border-radius-md);
-  padding: 10px 10px;
+  border-radius: var(--border-radius-lg);
+  padding: 14px 10px;
   display: flex;
   align-items: center;
   gap: 8px;
